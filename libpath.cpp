@@ -55,6 +55,30 @@ void _join(std::string& lpath, const std::string& rpth)
 
 }
 
+std::string _join(const std::string& str, const std::vector<std::string>& arr)
+{
+    if (arr.empty())
+    {
+        return "";
+    }
+    
+    std::string result;
+    for (auto iter = arr.cbegin();;)
+    {
+        result += *iter;
+        if (++iter != arr.cend())
+        {
+            result += str;
+        }
+        else
+        {
+            break;
+        }
+    }
+    
+    return result;
+}
+
 std::string ftxpath::join(const std::string &lpath, const std::string &rpath)
 {
     std::string path = lpath;
@@ -90,4 +114,67 @@ std::tuple<std::string, std::string> ftxpath::split(const std::string &path)
 {
     auto pos = path.find_last_of('/');
     return std::tuple<std::string, std::string>(path.substr(0, pos), path.substr(pos + 1));
+}
+
+std::string ftxpath::normpath(const std::string &path)
+{
+    if (path.empty())
+    {
+        return curdir;
+    }
+    
+    int initial_slashes = 0;
+    if (path[0] == '/')
+    {
+        initial_slashes = 1;
+    }
+    
+    if (initial_slashes == 1 && path[1] == '/' && path[2] != '/')
+    {
+        initial_slashes = 2;
+    }
+    
+    std::vector<std::string> comps;
+    _split(path, '/', comps);
+    
+    std::vector<std::string> new_comps;
+    for (auto comp : comps)
+    {
+        if (comp.empty() || comp == curdir)
+        {
+            continue;
+        }
+        
+        if (comp != pardir || (initial_slashes == 0 && new_comps.empty()) || (!new_comps.empty() && *(new_comps.crbegin()) == pardir))
+        {
+            new_comps.push_back(comp);
+        }
+        else if (!new_comps.empty())
+        {
+            new_comps.pop_back();
+        }
+    }
+    
+    std::string slash = "/";
+    std::string norm_path;
+    if (initial_slashes != 0)
+    {
+        for (int i = 0; i < initial_slashes; ++i)
+        {
+            norm_path += slash;
+        }
+    }
+    
+    norm_path += _join(slash, new_comps);
+    return norm_path;
+}
+
+std::string ftxpath::abspath(const std::string &path)
+{
+    std::string abs_path = path;
+    if (!isabs(abs_path))
+    {
+        abs_path = join(cwd(), path);
+    }
+    return normpath(abs_path);
 }

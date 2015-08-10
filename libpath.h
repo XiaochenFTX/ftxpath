@@ -26,6 +26,9 @@ namespace ftxpath {
     
     std::tuple<std::string, std::string> split(const std::string&);
     
+    std::string normpath(const std::string&);
+    
+    std::string abspath(const std::string&);    
 }
 
 #endif /* defined(__libpath__libpath__) */
