@@ -28,7 +28,9 @@ namespace ftxpath {
     
     std::string normpath(const std::string&);
     
-    std::string abspath(const std::string&);    
+    std::string abspath(const std::string&);
+    std::string relpath(const std::string&, const std::string& start = "");
+    
 }
 
 #endif /* defined(__libpath__libpath__) */

@@ -55,7 +55,7 @@ void _join(std::string& lpath, const std::string& rpth)
 
 }
 
-std::string _join(const std::string& str, const std::vector<std::string>& arr)
+std::string _join_str(const std::string& str, const std::vector<std::string>& arr)
 {
     if (arr.empty())
     {
@@ -165,7 +165,7 @@ std::string ftxpath::normpath(const std::string &path)
         }
     }
     
-    norm_path += _join(slash, new_comps);
+    norm_path += _join_str(slash, new_comps);
     return norm_path;
 }
 
@@ -177,4 +177,43 @@ std::string ftxpath::abspath(const std::string &path)
         abs_path = join(cwd(), path);
     }
     return normpath(abs_path);
+}
+
+std::string ftxpath::relpath(const std::string &path, const std::string &start)
+{
+    std::vector<std::string> path_list;
+    _split(abspath(path), '/', path_list);
+    
+    std::vector<std::string> start_list;
+    _split(abspath(start), '/', start_list);
+    
+    std::vector<std::string> rel_list;
+    
+    auto path_it = path_list.cbegin();
+    auto start_it = start_list.cbegin();
+    for (;path_it != path_list.cend() && start_it != start_list.cend(); ++path_it, ++start_it)
+    {
+        if (*path_it != *start_it)
+        {
+            break;
+        }
+    }
+    
+    for (; start_it != start_list.cend(); ++start_it)
+    {
+        rel_list.push_back(pardir);
+    }
+    
+    for (; path_it != path_list.cend(); ++path_it)
+    {
+        rel_list.push_back(*path_it);
+    }
+    
+    std::string rel_path;
+    for (auto node : rel_list)
+    {
+        _join(rel_path, node);
+    }
+    
+    return rel_path;
 }
