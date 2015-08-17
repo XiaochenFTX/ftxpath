@@ -13,6 +13,8 @@
 #include <string>
 #include <unistd.h>
 #include <cstdlib>
+#include <dirent.h>
+#include <sys/stat.h>
 
 
 const std::string curdir = ".";
@@ -216,4 +218,51 @@ std::string ftxpath::relpath(const std::string &path, const std::string &start)
     }
     
     return rel_path;
+}
+
+std::vector<std::string> ftxpath::listdir(const std::string &path)
+{
+    std::vector<std::string> list_dir;
+    DIR* pDir = opendir(path.c_str());
+    if (pDir != nullptr)
+    {
+        struct dirent *ent;
+        while ((ent=readdir(pDir)) != nullptr)
+        {
+            std::string name = ent->d_name;
+            if (name == curdir || name == pardir)
+            {
+                continue;
+            }
+            list_dir.push_back(ent->d_name);
+        }
+        closedir(pDir);
+    }
+    
+    return list_dir;
+}
+
+bool ftxpath::isdir(const std::string &path)
+{
+    struct stat buf;
+    return stat(path.c_str(), &buf) == 0 && S_ISDIR(buf.st_mode);
+}
+
+bool ftxpath::isfile(const std::string &path)
+{
+    struct stat buf;
+    return stat(path.c_str(), &buf) == 0 && S_ISREG(buf.st_mode);
+}
+
+PathGenerator ftxpath::walk(const std::string &path)
+{
+    return PathGenerator(path);
+}
+
+void ftxpath::walk(const std::string &path, std::function<void(std::string root, std::vector<std::string> folders, std::vector<std::string> files)> func)
+{
+    for (auto p : walk(path))
+    {
+        func(std::get<0>(p), std::get<1>(p), std::get<2>(p));
+    }
 }

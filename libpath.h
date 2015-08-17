@@ -11,6 +11,8 @@
 
 #include <string>
 #include <vector>
+#include <functional>
+#include "Generator.h"
 
 namespace ftxpath {
     
@@ -31,6 +33,40 @@ namespace ftxpath {
     std::string abspath(const std::string&);
     std::string relpath(const std::string&, const std::string& start = "");
     
+    std::vector<std::string> listdir(const std::string&);
+    bool isdir(const std::string&);
+    bool isfile(const std::string&);
+    
+    /*
+    for (auto p : walk(path))
+    {
+        std::cout<< std::get<0>(p) <<std::endl;
+        for (auto folder : std::get<1>(p))
+        {
+            std::cout<< folder <<std::endl;
+        }
+        for (auto file : std::get<2>(p))
+        {
+            std::cout<< file <<std::endl;
+        }
+    }
+     */
+    PathGenerator walk(const std::string&);
+    
+    /*
+    walk(path, [](std::string root, std::vector<std::string> folders, std::vector<std::string> files){
+        std::cout<< root <<std::endl;
+        for (auto folder : folders)
+        {
+            std::cout<< folder <<std::endl;
+        }
+        for (auto file : files)
+        {
+            std::cout<< file <<std::endl;
+        }
+    });
+     */
+    void walk(const std::string&, std::function<void(std::string root, std::vector<std::string> folders, std::vector<std::string> files)>);
 }
 
 #endif /* defined(__libpath__libpath__) */
