@@ -266,3 +266,9 @@ void ftxpath::walk(const std::string &path, std::function<void(std::string root,
         func(std::get<0>(p), std::get<1>(p), std::get<2>(p));
     }
 }
+
+bool ftxpath::exists(const std::string &path)
+{
+    struct stat buf;
+    return stat(path.c_str(), &buf) == 0;
+}
