@@ -9,10 +9,10 @@
 #include <iostream>
 #include <cstdlib>
 
-#define TEST_BOOL_TO_BOOL(b1, b2)   \
-if (b1)                             \
+#define TEST_BOOL_TO_BOOL(b, str)   \
+if (b)                              \
 {                                   \
-    std::cout<< b2 <<std::endl;     \
+    std::cout<< str <<std::endl;    \
     return false;                   \
 }
 
@@ -21,6 +21,12 @@ std::cout   << __FUNCTION__         \
             << "  ************  "   \
             << str                  \
             << std::endl;
+
+#define CASE_ONE_TEST_BY_ARGV1(pstr, b) \
+if (strcmp(argv[1], pstr) == 0 && !b)   \
+{                                       \
+    return 1;                           \
+}
 
 
 #endif //LIBPATH_TESTER_H
