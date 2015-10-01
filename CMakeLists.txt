@@ -3,12 +3,7 @@ project(libpath)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES
-    Generator.cpp
-    Generator.h
-    libpath.cpp
-    libpath.h
-    split.cpp
-    split.h)
+add_subdirectory(src bin)
 
-add_library(ftxpath STATIC ${SOURCE_FILES})
+enable_testing()
+add_subdirectory(test test_bin)
