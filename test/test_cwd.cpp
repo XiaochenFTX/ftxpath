@@ -6,19 +6,14 @@
 
 #include <libpath.h>
 
-#include <string>
-#include <iostream>
+#include "tester.h"
 
 bool test_cwd() {
     std::string str_cwd = ftxpath::cwd();
 
-    std::cout << "test_cwd ******* " << str_cwd <<std::endl;
+    LOG_TEST_STRING(str_cwd);
 
-    if(str_cwd.empty())
-    {
-        std::cout << "cwd empty" <<std::endl;
-        return false;
-    }
+    TEST_BOOL_TO_BOOL(str_cwd.empty(), "cwd empty");
 
     return true;
 }

@@ -28,3 +28,11 @@
 *.app
 
 .idea/
+
+CMake*
+*.cmake
+Makefile
+Testing/
+
+bin/
+test_bin/

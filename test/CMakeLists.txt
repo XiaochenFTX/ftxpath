@@ -1,6 +1,6 @@
 
 set(SOURCE_FILES
-        main.cpp test_cwd.cpp test_cwd.h)
+        main.cpp test_cwd.cpp test_cwd.h tester.h)
 
 include_directories(../src)
 
