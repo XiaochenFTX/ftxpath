@@ -5,6 +5,6 @@
 #ifndef LIBPATH_TEST_CWD_H
 #define LIBPATH_TEST_CWD_H
 
-#endif //LIBPATH_TEST_CWD_H
-
 bool test_cwd();
+
+#endif //LIBPATH_TEST_CWD_H
