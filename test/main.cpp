@@ -13,11 +13,11 @@
 #include "test_normpath.h"
 #include "test_abspath.h"
 #include "test_relpath.h"
+#include "test_listdir.h"
 
 
 int main(int argc, char* argv[])
 {
-    test_relpath();
     if (argc < 2)
     {
         return 1;
@@ -32,6 +32,7 @@ int main(int argc, char* argv[])
     CASE_ONE_TEST_BY_ARGV1("normpath", test_normpath());
     CASE_ONE_TEST_BY_ARGV1("abspath", test_abspath());
     CASE_ONE_TEST_BY_ARGV1("relpath", test_relpath());
+    CASE_ONE_TEST_BY_ARGV1("listdir", test_listdir());
 
     return 0;
 }
