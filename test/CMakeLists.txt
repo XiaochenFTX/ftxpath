@@ -9,7 +9,9 @@ set(SOURCE_FILES
         test_join.cpp
         test_join.h
         test_basename.cpp
-        test_basename.h)
+        test_basename.h
+        test_dirname.cpp
+        test_dirname.h)
 
 include_directories(../src)
 
@@ -24,3 +26,4 @@ add_test(test_cwd ftxpathtest cwd)
 add_test(test_isabs ftxpathtest isabs)
 add_test(test_join ftxpathtest join)
 add_test(test_basename ftxpathtest basename)
+add_test(test_dirname ftxpathtest dirname)

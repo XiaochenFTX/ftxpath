@@ -108,7 +108,18 @@ std::string ftxpath::basename(const std::string &path)
 
 std::string ftxpath::dirname(const std::string &path)
 {
+    if (path == "/")
+    {
+        return path;
+    }
+
     auto pos = path.find_last_of('/');
+
+    if (pos == std::string::npos)
+    {
+        return std::string();
+    }
+
     return path.substr(0, pos);
 }
 
