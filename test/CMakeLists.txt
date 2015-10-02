@@ -13,7 +13,9 @@ set(SOURCE_FILES
         test_dirname.cpp
         test_dirname.h
         test_split.cpp
-        test_split.h)
+        test_split.h
+        test_normpath.cpp
+        test_normpath.h)
 
 include_directories(../src)
 
@@ -30,3 +32,4 @@ add_test(test_join ftxpathtest join)
 add_test(test_basename ftxpathtest basename)
 add_test(test_dirname ftxpathtest dirname)
 add_test(test_split ftxpathtest split)
+add_test(test_normpath ftxpathtest normpath)
