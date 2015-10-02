@@ -25,7 +25,9 @@ set(SOURCE_FILES
         test_isdir.cpp
         test_isdir.h
         test_isfile.cpp
-        test_isfile.h)
+        test_isfile.h
+        test_walk.cpp
+        test_walk.h)
 
 include_directories(../src)
 
@@ -48,3 +50,4 @@ add_test(test_relpath ftxpathtest relpath)
 add_test(test_listdir ftxpathtest listdir)
 add_test(test_isdir ftxpathtest isdir)
 add_test(test_isfile ftxpathtest isfile)
+add_test(test_walk ftxpathtest walk)

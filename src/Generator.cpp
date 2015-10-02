@@ -60,10 +60,9 @@ const PathGenerator::PathTuple& PathGenerator::PathIterator::next()
 }
 
 PathGenerator::PathGenerator(const std::string& path)
-: _roots({"", ftxpath::abspath(path)})
+: _roots({ftxpath::normpath(ftxpath::abspath(path))})
 , _current(this)
 {
-
 }
 
 const PathGenerator::PathIterator& PathGenerator::begin()
@@ -80,13 +79,24 @@ void PathGenerator::pushFolder(const std::string& folder)
 {
     std::string root = _roots.back();
     root = ftxpath::join(root, folder);
-    _roots.push_back(root);
+    _roots.push_back(ftxpath::normpath(root));
 }
 
 std::string PathGenerator::popRoot()
 {
+    if (_roots.empty())
+    {
+        return std::string();
+    }
+
     std::string root = _roots.back();
     _roots.pop_back();
+
+    if (!ftxpath::isdir(root))
+    {
+        return std::string();
+    }
+
     return root;
 }
 

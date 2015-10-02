@@ -15,8 +15,8 @@ bool test_normpath_normal()
 
 bool test_normpath_pardir()
 {
-    std::string path = "/a/b/c/../..";
-    std::string normpath = "/a";
+    std::string path = "../a/b/c/../..";
+    std::string normpath = "../a";
 
     return normpath == ftxpath::normpath(path);
 }
