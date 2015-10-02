@@ -5,7 +5,9 @@ set(SOURCE_FILES
         test_cwd.cpp
         test_cwd.h
         test_isabs.cpp
-        test_isabs.h)
+        test_isabs.h
+        test_join.cpp
+        test_join.h)
 
 include_directories(../src)
 
@@ -18,3 +20,4 @@ target_link_libraries(ftxpathtest ftxpath)
 add_test(test_run ftxpathtest run)
 add_test(test_cwd ftxpathtest cwd)
 add_test(test_isabs ftxpathtest isabs)
+add_test(test_join ftxpathtest join)

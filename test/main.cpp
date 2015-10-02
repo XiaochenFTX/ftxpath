@@ -6,6 +6,7 @@
 
 #include "test_cwd.h"
 #include "test_isabs.h"
+#include "test_join.h"
 
 
 int main(int argc, char* argv[])
@@ -17,6 +18,7 @@ int main(int argc, char* argv[])
 
     CASE_ONE_TEST_BY_ARGV1("cwd", test_cwd());
     CASE_ONE_TEST_BY_ARGV1("isabs", test_isabs());
+    CASE_ONE_TEST_BY_ARGV1("join", test_join());
 
     return 0;
 }
