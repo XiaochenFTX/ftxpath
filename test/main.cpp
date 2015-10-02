@@ -12,10 +12,12 @@
 #include "test_split.h"
 #include "test_normpath.h"
 #include "test_abspath.h"
+#include "test_relpath.h"
 
 
 int main(int argc, char* argv[])
 {
+    test_relpath();
     if (argc < 2)
     {
         return 1;
@@ -29,6 +31,7 @@ int main(int argc, char* argv[])
     CASE_ONE_TEST_BY_ARGV1("split", test_split());
     CASE_ONE_TEST_BY_ARGV1("normpath", test_normpath());
     CASE_ONE_TEST_BY_ARGV1("abspath", test_abspath());
+    CASE_ONE_TEST_BY_ARGV1("relpath", test_relpath());
 
     return 0;
 }

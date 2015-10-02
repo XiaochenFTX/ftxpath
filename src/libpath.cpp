@@ -222,7 +222,7 @@ std::string ftxpath::relpath(const std::string &path, const std::string &start)
             break;
         }
     }
-    
+
     for (; start_it != start_list.cend(); ++start_it)
     {
         rel_list.push_back(pardir);

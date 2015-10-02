@@ -17,7 +17,9 @@ set(SOURCE_FILES
         test_normpath.cpp
         test_normpath.h
         test_abspath.cpp
-        test_abspath.h)
+        test_abspath.h
+        test_relpath.cpp
+        test_relpath.h)
 
 include_directories(../src)
 
@@ -36,3 +38,4 @@ add_test(test_dirname ftxpathtest dirname)
 add_test(test_split ftxpathtest split)
 add_test(test_normpath ftxpathtest normpath)
 add_test(test_abspath ftxpathtest abspath)
+add_test(test_relpath ftxpathtest relpath)
