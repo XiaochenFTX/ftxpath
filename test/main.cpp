@@ -15,6 +15,7 @@
 #include "test_relpath.h"
 #include "test_listdir.h"
 #include "test_isdir.h"
+#include "test_isfile.h"
 
 
 int main(int argc, char* argv[])
@@ -35,6 +36,7 @@ int main(int argc, char* argv[])
     CASE_ONE_TEST_BY_ARGV1("relpath", test_relpath());
     CASE_ONE_TEST_BY_ARGV1("listdir", test_listdir());
     CASE_ONE_TEST_BY_ARGV1("isdir", test_isabs());
+    CASE_ONE_TEST_BY_ARGV1("isfile", test_isfile());
 
     return 0;
 }
