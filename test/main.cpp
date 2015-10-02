@@ -9,6 +9,7 @@
 #include "test_join.h"
 #include "test_basename.h"
 #include "test_dirname.h"
+#include "test_split.h"
 
 
 int main(int argc, char* argv[])
@@ -23,6 +24,7 @@ int main(int argc, char* argv[])
     CASE_ONE_TEST_BY_ARGV1("join", test_join());
     CASE_ONE_TEST_BY_ARGV1("basename", test_basename());
     CASE_ONE_TEST_BY_ARGV1("dirname", test_dirname());
+    CASE_ONE_TEST_BY_ARGV1("split", test_split());
 
     return 0;
 }

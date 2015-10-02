@@ -125,7 +125,18 @@ std::string ftxpath::dirname(const std::string &path)
 
 std::tuple<std::string, std::string> ftxpath::split(const std::string &path)
 {
+    if (path == "/")
+    {
+        return std::tuple<std::string, std::string>(path, "");
+    }
+
     auto pos = path.find_last_of('/');
+
+    if (pos == std::string::npos)
+    {
+        return std::tuple<std::string, std::string>("", path);
+    }
+
     return std::tuple<std::string, std::string>(path.substr(0, pos), path.substr(pos + 1));
 }
 
