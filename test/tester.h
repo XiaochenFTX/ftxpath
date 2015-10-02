@@ -10,7 +10,7 @@
 #include <cstdlib>
 
 #define TEST_BOOL_TO_BOOL(b, str)   \
-if (b)                              \
+if (!b)                              \
 {                                   \
     std::cout<< str <<std::endl;    \
     return false;                   \

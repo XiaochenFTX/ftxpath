@@ -29,9 +29,9 @@ bool test_cwd() {
 
     LOG_TEST_STRING(str_cwd);
 
-    TEST_BOOL_TO_BOOL(str_cwd.empty(), "cwd empty");
+    TEST_BOOL_TO_BOOL(!str_cwd.empty(), "cwd empty");
 
-    TEST_BOOL_TO_BOOL(mycwd() == str_cwd, "cwd path error");
+    TEST_BOOL_TO_BOOL((mycwd() == str_cwd), "cwd path error");
 
     TEST_BOOL_TO_BOOL(test_cwd_isdir(str_cwd), "cwd not dir");
 
