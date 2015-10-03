@@ -29,7 +29,11 @@ set(SOURCE_FILES
         test_walk.cpp
         test_walk.h
         test_exists.cpp
-        test_exists.h)
+        test_exists.h
+        test_commonprefix.cpp
+        test_commonprefix.h
+        test_splitext.cpp
+        test_splitext.h)
 
 include_directories(../src)
 
@@ -54,3 +58,5 @@ add_test(test_isdir ftxpathtest isdir)
 add_test(test_isfile ftxpathtest isfile)
 add_test(test_walk ftxpathtest walk)
 add_test(test_exists ftxpathtest exists)
+add_test(test_commonprefix ftxpathtest commonprefix)
+add_test(test_splitext ftxpathtest splitext)
