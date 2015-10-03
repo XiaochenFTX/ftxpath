@@ -295,20 +295,20 @@ bool ftxpath::exists(const std::string &path)
     return stat(path.c_str(), &buf) == 0;
 }
 
-void _make_path_list(std::string& path, std::vector<std::string>& path_list)
+void _make_path_list(const std::string& path, std::vector<std::string>& path_list)
 {
     std::string abspath = ftxpath::normpath(ftxpath::abspath(path));
     _split(abspath, '/', path_list);
 }
 
-std::vector<std::string> _make_path_list(std::string& path)
+std::vector<std::string> _make_path_list(const std::string& path)
 {
     std::vector<std::string> path_list;
     _make_path_list(path, path_list);
     return path_list;
 }
 
-std::string ftxpath::commonprefix(std::string &path1,  std::string &path2)
+std::string ftxpath::commonprefix(const std::string &path1,  const std::string &path2)
 {
     if (path1.empty() || path2.empty())
     {
@@ -400,22 +400,30 @@ ENDING:
     return common_path;
 }
 
-std::tuple<std::string, std::string> ftxpath::splitext(std::string &path)
+std::tuple<std::string, std::string> ftxpath::splitext(const std::string &path)
 {
     auto sep_index = path.rfind(sep);
     auto dot_index = path.rfind(extsep);
 
-    if (dot_index > sep_index)
+    if (dot_index != std::string::npos)
     {
-        auto filename_index = sep_index + 1;
-        while (filename_index < dot_index)
+        if (sep_index == std::string::npos)
         {
-            if (path.substr(filename_index, 1) != sep)
-            {
-                return std::make_tuple(path.substr(0, dot_index), path.substr(dot_index));
-            }
+            return std::make_tuple(path.substr(0, dot_index), path.substr(dot_index));
+        }
 
-            filename_index++;
+        if (dot_index > sep_index)
+        {
+            auto filename_index = sep_index + 1;
+            while (filename_index < dot_index)
+            {
+                if (path.substr(filename_index, 1) != sep)
+                {
+                    return std::make_tuple(path.substr(0, dot_index), path.substr(dot_index));
+                }
+
+                filename_index++;
+            }
         }
     }
 

@@ -70,10 +70,10 @@ namespace ftxpath {
     
     bool exists(const std::string&);
 
-    std::string commonprefix(std::string&, std::string&);
+    std::string commonprefix(const std::string&, const std::string&);
     std::string commonprefix(std::vector<std::string>);
 
-    std::tuple<std::string, std::string> splitext(std::string&);
+    std::tuple<std::string, std::string> splitext(const std::string&);
 }
 
 #endif /* defined(__libpath__libpath__) */
