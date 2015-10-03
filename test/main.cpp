@@ -18,6 +18,7 @@
 #include "test_isfile.h"
 #include "test_walk.h"
 #include "test_exists.h"
+#include "test_commonprefix.h"
 
 
 int main(int argc, char* argv[])
@@ -41,6 +42,7 @@ int main(int argc, char* argv[])
     CASE_ONE_TEST_BY_ARGV1("isfile", test_isfile());
     CASE_ONE_TEST_BY_ARGV1("walk", test_walk());
     CASE_ONE_TEST_BY_ARGV1("exists", test_exists());
+    CASE_ONE_TEST_BY_ARGV1("commonprefix", test_commonprefix());
 
     return 0;
 }

@@ -333,10 +333,15 @@ std::string ftxpath::commonprefix(std::string &path1,  std::string &path2)
         }
     }
 
+    if (!common_path.empty())
+    {
+        common_path = "/" + common_path;
+    }
+
     return common_path;
 }
 
-std::string ftxpath::commonprefix(std::vector<std::string> &path_list)
+std::string ftxpath::commonprefix(std::vector<std::string> path_list)
 {
     if (path_list.empty())
     {
@@ -352,7 +357,7 @@ std::string ftxpath::commonprefix(std::vector<std::string> &path_list)
     }
 
     std::vector<std::vector<std::string>> path_list_table;
-    size_t min_size = 0;
+    size_t min_size = 999999; // ... short than 999999
     for (std::string path : path_list)
     {
         std::vector<std::string> list = _make_path_list(path);
@@ -378,11 +383,18 @@ std::string ftxpath::commonprefix(std::vector<std::string> &path_list)
 
             if (node != common_node)
             {
-                return common_path;
+                goto ENDING;
             }
         }
 
         _join(common_path, common_node);
+    }
+
+ENDING:
+
+    if (!common_path.empty())
+    {
+        common_path = "/" + common_path;
     }
 
     return common_path;

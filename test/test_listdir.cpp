@@ -14,11 +14,13 @@ bool test_listdir_check()
     std::string dirpath = "../test/testlistdir";
 
     std::set<std::string> right_set = {"dir1", "dir2", "file1", "file2"};
+    std::vector<std::string> path_list = ftxpath::listdir(dirpath);
 
-    for (auto node : ftxpath::listdir(dirpath))
+    for (auto node : path_list)
     {
-        if (right_set.find(node) == right_set.end())
+        if (node != ".DS_Store" && right_set.find(node) == right_set.end())
         {
+            std::cout<< "listdir *****  " << node <<std::endl;
             return false;
         }
     }
