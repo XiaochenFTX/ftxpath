@@ -399,3 +399,25 @@ ENDING:
 
     return common_path;
 }
+
+std::tuple<std::string, std::string> ftxpath::splitext(std::string &path)
+{
+    auto sep_index = path.rfind(sep);
+    auto dot_index = path.rfind(extsep);
+
+    if (dot_index > sep_index)
+    {
+        auto filename_index = sep_index + 1;
+        while (filename_index < dot_index)
+        {
+            if (path.substr(filename_index, 1) != sep)
+            {
+                return std::make_tuple(path.substr(0, dot_index), path.substr(dot_index));
+            }
+
+            filename_index++;
+        }
+    }
+
+    return std::make_tuple(path, std::string());
+}
