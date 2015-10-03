@@ -294,3 +294,96 @@ bool ftxpath::exists(const std::string &path)
     struct stat buf;
     return stat(path.c_str(), &buf) == 0;
 }
+
+void _make_path_list(std::string& path, std::vector<std::string>& path_list)
+{
+    std::string abspath = ftxpath::normpath(ftxpath::abspath(path));
+    _split(abspath, '/', path_list);
+}
+
+std::vector<std::string> _make_path_list(std::string& path)
+{
+    std::vector<std::string> path_list;
+    _make_path_list(path, path_list);
+    return path_list;
+}
+
+std::string ftxpath::commonprefix(std::string &path1,  std::string &path2)
+{
+    if (path1.empty() || path2.empty())
+    {
+        return std::string();
+    }
+
+    std::vector<std::string> path1_list = _make_path_list(path1);
+    std::vector<std::string> path2_list = _make_path_list(path2);
+
+    std::string common_path;
+    for (auto i = 0; i < path1_list.size() && i < path2_list.size(); ++i)
+    {
+        std::string node1 = path1_list[i];
+        std::string node2 = path2_list[i];
+        if (node1 == node2)
+        {
+            _join(common_path, node1);
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return common_path;
+}
+
+std::string ftxpath::commonprefix(std::vector<std::string> &path_list)
+{
+    if (path_list.empty())
+    {
+        return std::string();
+    }
+
+    for (std::string path : path_list)
+    {
+        if (path.empty())
+        {
+            return std::string();
+        }
+    }
+
+    std::vector<std::vector<std::string>> path_list_table;
+    size_t min_size = 0;
+    for (std::string path : path_list)
+    {
+        std::vector<std::string> list = _make_path_list(path);
+        if (list.size() < min_size)
+        {
+            min_size = list.size();
+        }
+        path_list_table.push_back(list);
+    }
+
+    std::string common_path;
+    for (auto i = 0; i < min_size; ++i)
+    {
+        std::string common_node;
+        for (auto list : path_list_table)
+        {
+            std::string node = list[i];
+            if (common_node.empty())
+            {
+                common_node = node;
+                continue;
+            }
+
+            if (node != common_node)
+            {
+                return common_path;
+            }
+        }
+
+        _join(common_path, common_node);
+    }
+
+    return common_path;
+}

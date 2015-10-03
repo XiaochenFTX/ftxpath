@@ -69,6 +69,9 @@ namespace ftxpath {
     void walk(const std::string&, std::function<void(std::string root, std::vector<std::string> folders, std::vector<std::string> files)>);
     
     bool exists(const std::string&);
+
+    std::string commonprefix(std::string&, std::string&);
+    std::string commonprefix(std::vector<std::string>&);
 }
 
 #endif /* defined(__libpath__libpath__) */
