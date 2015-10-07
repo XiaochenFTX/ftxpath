@@ -429,3 +429,73 @@ std::tuple<std::string, std::string> ftxpath::splitext(const std::string &path)
 
     return std::make_tuple(path, std::string());
 }
+
+int ftxpath::cd(const std::string &path) {
+    return chdir(path.c_str());
+}
+
+void ftxpath::makedirs(const std::string &path) {
+    std::string abspath = ftxpath::normpath(ftxpath::abspath(path));
+
+    std::string temp_path = "/";
+    for (auto node : _split(abspath, '/'))
+    {
+        temp_path = ftxpath::join(temp_path, node);
+        if (!ftxpath::isdir(temp_path))
+        {
+            mkdir(temp_path.c_str(), ACCESSPERMS);
+        }
+    }
+}
+
+#include <iostream>
+void ftxpath::rmtree(const std::string &path) {
+    if (!ftxpath::isdir(path))
+    {
+        remove(path.c_str());
+    }
+
+    std::string temp_path = ftxpath::relpath(path);
+    auto nodes = ftxpath::listdir(temp_path);
+    while (nodes.size() != 0)
+    {
+        std::string node_path = ftxpath::join(temp_path, nodes[0]);
+
+        if (ftxpath::isdir(node_path))
+        {
+            auto temp_nodes = ftxpath::listdir(node_path);
+            if (temp_nodes.size() == 0)
+            {
+                rmdir(node_path.c_str());
+            }
+            else
+            {
+                temp_path = node_path;
+            }
+        }
+        else
+        {
+            remove(node_path.c_str());
+        }
+
+        nodes = ftxpath::listdir(temp_path);
+        while(nodes.size() == 0)
+        {
+            std::string root;
+            std::string node;
+            std::tie(root, node) = ftxpath::split(ftxpath::relpath(temp_path, path));
+
+            if (node.empty() || root.find(pardir) != std::string::npos)
+            {
+                break;
+            }
+
+            rmdir(temp_path.c_str());
+
+            temp_path = ftxpath::join(path, root);
+            nodes = ftxpath::listdir(temp_path);
+        }
+    }
+
+    rmdir(path.c_str());
+}
