@@ -448,6 +448,7 @@ void ftxpath::makedirs(const std::string &path) {
     }
 }
 
+#include <iostream>
 void ftxpath::rmtree(const std::string &path) {
     if (!ftxpath::isdir(path))
     {
@@ -481,9 +482,10 @@ void ftxpath::rmtree(const std::string &path) {
         while(nodes.size() == 0)
         {
             std::string root;
-            std::tie(root, std::ignore) = ftxpath::split(ftxpath::relpath(temp_path, path));
+            std::string node;
+            std::tie(root, node) = ftxpath::split(ftxpath::relpath(temp_path, path));
 
-            if (root.empty() || root.find(pardir) != std::string::npos)
+            if (node.empty() || root.find(pardir) != std::string::npos)
             {
                 break;
             }
