@@ -433,3 +433,17 @@ std::tuple<std::string, std::string> ftxpath::splitext(const std::string &path)
 int ftxpath::cd(const std::string &path) {
     return chdir(path.c_str());
 }
+
+void ftxpath::makedirs(const std::string &path) {
+    std::string abspath = ftxpath::normpath(ftxpath::abspath(path));
+
+    std::string temp_path = "/";
+    for (auto node : _split(abspath, '/'))
+    {
+        temp_path = ftxpath::join(temp_path, node);
+        if (!ftxpath::isdir(temp_path))
+        {
+            mkdir(temp_path.c_str(), ACCESSPERMS);
+        }
+    }
+}
