@@ -22,6 +22,7 @@
 #include "test_splitext.h"
 #include "test_chdir.h"
 #include "test_makedirs.h"
+#include "test_rmtree.h"
 
 
 int main(int argc, char* argv[])
@@ -49,6 +50,7 @@ int main(int argc, char* argv[])
     CASE_ONE_TEST_BY_ARGV1("splitext", test_splitext());
     CASE_ONE_TEST_BY_ARGV1("chdir", test_chdir());
     CASE_ONE_TEST_BY_ARGV1("makedirs", test_makedirs());
+    CASE_ONE_TEST_BY_ARGV1("rmtree", test_rmtree());
 
     return 0;
 }

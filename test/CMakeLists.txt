@@ -37,7 +37,9 @@ set(SOURCE_FILES
         test_chdir.cpp
         test_chdir.h
         test_makedirs.cpp
-        test_makedirs.h)
+        test_makedirs.h
+        test_rmtree.cpp
+        test_rmtree.h)
 
 include_directories(../src)
 
@@ -66,3 +68,4 @@ add_test(test_commonprefix ftxpathtest commonprefix)
 add_test(test_splitext ftxpathtest splitext)
 add_test(test_chdir ftxpathtest chdir)
 add_test(test_makedirs ftxpathtest makedirs)
+add_test(test_rmtree ftxpathtest rmtree)
