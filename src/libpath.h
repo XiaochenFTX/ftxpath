@@ -74,6 +74,9 @@ namespace ftxpath {
     std::string commonprefix(std::vector<std::string>);
 
     std::tuple<std::string, std::string> splitext(const std::string&);
+
+    // chdir
+    int cd(const std::string&);
 }
 
 #endif /* defined(__libpath__libpath__) */

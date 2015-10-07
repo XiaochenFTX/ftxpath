@@ -429,3 +429,7 @@ std::tuple<std::string, std::string> ftxpath::splitext(const std::string &path)
 
     return std::make_tuple(path, std::string());
 }
+
+int ftxpath::cd(const std::string &path) {
+    return chdir(path.c_str());
+}
