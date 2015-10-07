@@ -54,6 +54,6 @@ bool test_makedirs() {
     TEST_BOOL_TO_BOOL(test_makedirs_one(), "test makedirs one dir failed");
 
     TEST_BOOL_TO_BOOL(test_makedirs_multi(), "test makedirs multi dir failed");
-    
+
     return true;
 }

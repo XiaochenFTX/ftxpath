@@ -79,6 +79,7 @@ namespace ftxpath {
     int cd(const std::string&);
 
     void makedirs(const std::string&);
+    void rmtree(const std::string&);
 }
 
 #endif /* defined(__libpath__libpath__) */
