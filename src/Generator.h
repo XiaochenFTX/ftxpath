@@ -13,6 +13,7 @@
 #include <tuple>
 #include <string>
 #include <vector>
+#include <deque>
 
 
 class PathGenerator
@@ -43,11 +44,12 @@ public:
     
 private:
     void pushFolder(const std::string& folder);
-    std::string popRoot();
+    void popRoot();
+    std::string nextRoot();
     bool empty();
 
 private:
-    std::vector<std::string> _roots;
+    std::deque<std::string> _roots;
     PathIterator _current;
 };
 
