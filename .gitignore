@@ -30,9 +30,9 @@
 .idea/
 
 CMake*
-*.cmake
 Makefile
 Testing/
 
+CTestTestfile.cmake
 bin/
 test_bin/

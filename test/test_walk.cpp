@@ -35,6 +35,7 @@ bool test_walk_ghost()
     return true;
 }
 
+int state = 0;
 bool test_walk_check()
 {
     std::string path = "../test/testlistdir";
@@ -54,7 +55,7 @@ bool test_walk_check()
         }
 
         auto dirs = std::get<1>(p);
-        if (dirs.empty())
+        if (dirs.empty() && state == 0)
         {
             std::cout<< "walk check dirs empty" <<std::endl;
             return false;
@@ -82,6 +83,8 @@ bool test_walk_check()
                 return false;
             }
         }
+
+        state = 1;
     }
 
     return true;

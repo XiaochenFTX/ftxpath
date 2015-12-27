@@ -448,7 +448,6 @@ void ftxpath::makedirs(const std::string &path) {
     }
 }
 
-#include <iostream>
 void ftxpath::rmtree(const std::string &path) {
     if (!ftxpath::isdir(path))
     {
