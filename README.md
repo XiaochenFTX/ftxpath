@@ -11,15 +11,15 @@ Python (os.path) like, c++ path library
 
 ### build static library: ###
 
-$ cmake .
-$ make
+    $ cmake .
+    $ make
 
 ####################
 ### build for ios device static library: ###
-$ cmake . -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.cmake -DIOS_PLATFORM=OS
+    $ cmake . -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.cmake -DIOS_PLATFORM=OS
 
 ### build for ios simulator static library: ###
-$ cmake . -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.cmake -DIOS_PLATFORM=SIMULATOR
+    $ cmake . -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.cmake -DIOS_PLATFORM=SIMULATOR
 
 ### build for ios 64bit simulator static library: ###
-$ cmake . -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.cmake -DIOS_PLATFORM=SIMULATOR64
+    $ cmake . -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.cmake -DIOS_PLATFORM=SIMULATOR64
