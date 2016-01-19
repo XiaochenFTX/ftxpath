@@ -14,7 +14,6 @@ Python (os.path) like, c++ path library
     $ cmake .
     $ make
 
-####################
 ### build for ios device static library: ###
     $ cmake . -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.cmake -DIOS_PLATFORM=OS
 
@@ -23,3 +22,12 @@ Python (os.path) like, c++ path library
 
 ### build for ios 64bit simulator static library: ###
     $ cmake . -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.cmake -DIOS_PLATFORM=SIMULATOR64
+
+### build for android: ###
+    $ cmake . -DCMAKE_TOOLCHAIN_FILE=toolchain/android.toolchain.cmake  \
+    		  -DANDROID_NDK=<your ndk path>								\
+    		  -DANDROID_ABI=<armeabi or armeabi-v7a ... >				
+example:<br>
+```
+$ cmake . -DCMAKE_TOOLCHAIN_FILE=toolchain/android.toolchain.cmake -DANDROID_NDK=/Users/xiaochen/Develop/crystax-ndk-10.2.1 -DANDROID_TOOLCHAIN_NAME=arm-linux-androideabi-4.9 -DANDROID_NATIVE_API_LEVEL=8 -DANDROID_ABI=armeabi
+```
