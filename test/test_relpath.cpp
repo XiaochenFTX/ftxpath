@@ -4,7 +4,7 @@
 
 #include "test_relpath.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 bool test_relpath_relative()

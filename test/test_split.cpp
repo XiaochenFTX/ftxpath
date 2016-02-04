@@ -4,7 +4,7 @@
 
 #include "test_split.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 bool test_split_path()

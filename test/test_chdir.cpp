@@ -4,7 +4,7 @@
 
 #include "test_chdir.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 bool test_chdir_relpath()

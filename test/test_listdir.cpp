@@ -4,7 +4,7 @@
 
 #include "test_listdir.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 #include <set>

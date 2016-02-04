@@ -1,12 +1,12 @@
 //
-//  libpath.cpp
-//  libpath
+//  ftxpath.cpp
+//  ftxpath
 //
 //  Created by 王晓辰 on 15/8/8.
 //  Copyright (c) 2015年 ftxtool. All rights reserved.
 //
 
-#include "libpath.h"
+#include "ftxpath.h"
 
 #include "split.h"
 

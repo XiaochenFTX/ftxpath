@@ -4,7 +4,7 @@
 
 #include "test_isabs.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 bool test_isabs_check_abspath()

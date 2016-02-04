@@ -4,7 +4,7 @@
 
 #include "test_commonprefix.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 bool test_commonprefix_exists()

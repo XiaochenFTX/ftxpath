@@ -4,7 +4,7 @@
 
 #include "test_normpath.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 bool test_normpath_normal()

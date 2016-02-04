@@ -4,7 +4,7 @@
 
 #include "test_abspath.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 bool test_abspath_absolute()

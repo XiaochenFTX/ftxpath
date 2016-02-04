@@ -4,7 +4,7 @@
 
 #include "test_join.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 bool join_string()

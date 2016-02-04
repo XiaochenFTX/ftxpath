@@ -2,8 +2,8 @@
 // Created by 王晓辰 on 15/10/1.
 //
 
-#ifndef LIBPATH_TESTER_H
-#define LIBPATH_TESTER_H
+#ifndef ftxpath_TESTER_H
+#define ftxpath_TESTER_H
 
 #include <string>
 #include <iostream>
@@ -29,4 +29,4 @@ if (strcmp(argv[1], pstr) == 0 && !b)   \
 }
 
 
-#endif //LIBPATH_TESTER_H
+#endif //ftxpath_TESTER_H

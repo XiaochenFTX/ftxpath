@@ -4,7 +4,7 @@
 
 #include "test_dirname.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 bool test_dirname_path()
