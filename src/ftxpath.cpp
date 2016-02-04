@@ -313,6 +313,11 @@ std::vector<std::string> ftxpath::listdir(const std::string &path)
 #endif
 }
 
+#ifdef WIN32
+#define S_ISDIR(st_mode) (_S_IFDIR == st_mode)
+#define S_ISREG(st_mode) (_S_IFREG == st_mode)
+#endif
+
 bool ftxpath::isdir(const std::string &path)
 {
     struct stat buf;
