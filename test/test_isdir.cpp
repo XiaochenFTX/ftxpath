@@ -4,7 +4,7 @@
 
 #include "test_isdir.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 bool test_isdir_dir()

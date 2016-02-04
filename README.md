@@ -1,4 +1,4 @@
-### libpath ###
+### ftxpath ###
 Python (os.path) like, c++ path library
 
 ### 开这个坑的理由是：###

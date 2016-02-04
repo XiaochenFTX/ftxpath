@@ -4,7 +4,7 @@
 
 #include "test_isfile.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 bool test_isfile_file()

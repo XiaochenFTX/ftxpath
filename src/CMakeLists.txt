@@ -2,8 +2,8 @@
 set(SOURCE_FILES
         Generator.cpp
         Generator.h
-        libpath.cpp
-        libpath.h
+        ftxpath.cpp
+        ftxpath.h
         split.cpp
         split.h)
 

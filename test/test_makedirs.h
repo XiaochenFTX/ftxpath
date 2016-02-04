@@ -2,9 +2,9 @@
 // Created by 王晓辰 on 15/10/7.
 //
 
-#ifndef LIBPATH_TEST_MAKEDIRS_H
-#define LIBPATH_TEST_MAKEDIRS_H
+#ifndef ftxpath_TEST_MAKEDIRS_H
+#define ftxpath_TEST_MAKEDIRS_H
 
 bool test_makedirs();
 
-#endif //LIBPATH_TEST_MAKEDIRS_H
+#endif //ftxpath_TEST_MAKEDIRS_H

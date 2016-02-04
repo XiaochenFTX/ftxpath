@@ -4,7 +4,7 @@
 
 #include "test_rmtree.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 void make_test_tree()

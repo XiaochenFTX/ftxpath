@@ -4,7 +4,7 @@
 
 #include "test_cwd.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 #include <sys/stat.h>

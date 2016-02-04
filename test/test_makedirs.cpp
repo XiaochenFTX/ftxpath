@@ -4,7 +4,7 @@
 
 #include "test_makedirs.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 bool test_makedirs_one()

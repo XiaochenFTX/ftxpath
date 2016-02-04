@@ -1,6 +1,6 @@
 //
 //  Generator.cpp
-//  libpath
+//  ftxpath
 //
 //  Created by 王晓辰 on 15/8/16.
 //  Copyright (c) 2015年 ftxtool. All rights reserved.
@@ -8,7 +8,7 @@
 
 #include "Generator.h"
 
-#include "libpath.h"
+#include "ftxpath.h"
 
 
 PathGenerator::PathIterator::PathIterator(PathGenerator* generator)

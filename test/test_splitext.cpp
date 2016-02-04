@@ -4,7 +4,7 @@
 
 #include "test_splitext.h"
 
-#include <libpath.h>
+#include <ftxpath.h>
 #include "tester.h"
 
 bool test_splitext_normal()
