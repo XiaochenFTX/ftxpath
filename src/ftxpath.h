@@ -1,13 +1,13 @@
 //
-//  libpath.h
-//  libpath
+//  ftxpath.h
+//  ftxpath
 //
 //  Created by 王晓辰 on 15/8/8.
 //  Copyright (c) 2015年 ftxtool. All rights reserved.
 //
 
-#ifndef __libpath__libpath__
-#define __libpath__libpath__
+#ifndef __ftxpath__ftxpath__
+#define __ftxpath__ftxpath__
 
 #include <string>
 #include <vector>
@@ -82,4 +82,4 @@ namespace ftxpath {
     void rmtree(const std::string&);
 }
 
-#endif /* defined(__libpath__libpath__) */
+#endif /* defined(__ftxpath__ftxpath__) */
