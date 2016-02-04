@@ -8,12 +8,24 @@
 #include "tester.h"
 
 #include <sys/stat.h>
+#include <direct.h>
 
 std::string mycwd()
 {
-    char* buff = getcwd(nullptr, 0);
-    std::string path(buff);
-    free(buff);
+	char* buff = nullptr;
+    
+#ifdef WIN32
+	buff = _getcwd(nullptr, 0);
+#else
+	buff = getcwd(nullptr, 0);
+#endif
+
+	std::string path(buff);
+	
+	if (buff != nullptr)
+	{
+		free(buff);
+	}
 
     return path;
 }

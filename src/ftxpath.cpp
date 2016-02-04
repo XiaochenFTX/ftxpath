@@ -11,26 +11,39 @@
 #include "split.h"
 
 #include <string>
-#include <unistd.h>
 #include <cstdlib>
-#include <dirent.h>
 #include <sys/stat.h>
+#ifdef WIN32
+#include <direct.h>
+#else
+#include <dirent.h>
+#include <unistd.h>
+#endif
 
 
 const std::string curdir = ".";
 const std::string pardir = "..";
 const std::string extsep = ".";
 const std::string sep = "/";
-const std::string pathsep = ":";
-const std::string defpath = ":/bin:/usr/bin";
 
 
 
 std::string ftxpath::cwd()
 {
-    char* buff = getcwd(nullptr, 0);
-    std::string path(buff);
-    free(buff);
+	char* buff = nullptr;
+
+#ifdef WIN32
+	buff = _getcwd(nullptr, 0);
+#else
+    buff = getcwd(nullptr, 0);
+#endif
+
+	std::string path(buff);
+
+	if (buff != nullptr)
+	{
+		free(buff);
+	}
     
     return path;
 }
