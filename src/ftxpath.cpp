@@ -32,7 +32,6 @@ const char sep = '\\';
 const char altsep = '/';
 #else
 const char sep = '/';
-const char altsep = '';
 #endif
 
 
@@ -75,13 +74,13 @@ void _join(std::string& lpath, const std::string& rpth)
     {
         lpath = rpth;
     }
-    else if (lpath.empty() || *(lpath.rbegin()) == '/')
+	else if (lpath.empty() || *(lpath.rbegin()) == sep || *(lpath.rbegin()) == altsep)
     {
         lpath += rpth;
     }
     else
     {
-        lpath += "/" + rpth;
+        lpath += sep + rpth;
     }
 
 }
@@ -234,11 +233,19 @@ std::string ftxpath::abspath(const std::string &path)
 
 std::string ftxpath::relpath(const std::string &path, const std::string &start)
 {
+	std::string np = path;
+	std::string ns = start;
+
+#ifdef WIN32
+	std::replace(np.begin(), np.end(), altsep, sep);
+	std::replace(ns.begin(), ns.end(), altsep, sep);
+#endif
+
     std::vector<std::string> path_list;
-    _split(abspath(path), '/', path_list);
+    _split(abspath(np), sep, path_list);
     
     std::vector<std::string> start_list;
-    _split(abspath(start), '/', start_list);
+    _split(abspath(ns), sep, start_list);
     
     std::vector<std::string> rel_list;
     

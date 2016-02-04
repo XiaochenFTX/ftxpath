@@ -31,6 +31,11 @@ bool test_relpath_absolute_start()
 {
     std::string relpath = "a/b/c";
     std::string startpath = "/a/b";
+
+#ifdef WIN32
+	startpath = "c:\\a\\b";
+#endif
+
     std::string result = ftxpath::relpath(relpath, startpath);
 
     std::cout<< "test relpath start absolute: " << result <<std::endl;
