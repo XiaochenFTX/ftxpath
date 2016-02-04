@@ -11,6 +11,10 @@ bool test_relpath_relative()
 {
     std::string relpath = "a/b/c";
 
+#ifdef WIN32
+	relpath = "a\\b\\c";
+#endif
+
     return relpath == ftxpath::relpath(relpath);
 }
 
@@ -43,6 +47,10 @@ bool test_relpath_absolute_start()
     std::string curpath = ftxpath::cwd();
 
     std::string right_res = "../.." + curpath + "/" + relpath;
+
+#ifdef WIN32
+	right_res = "..\\..\\.." + curpath + "\\" + relpath;
+#endif
 
     return right_res == result;
 }

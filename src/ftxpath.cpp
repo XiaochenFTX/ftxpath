@@ -231,6 +231,21 @@ std::string ftxpath::abspath(const std::string &path)
     return normpath(abs_path);
 }
 
+#ifdef WIN32
+std::tuple<std::string, std::vector<std::string>> _abspath_split(const std::string& path)
+{
+	std::string abs = ftxpath::abspath(ftxpath::normpath(path));
+	std::string drive;
+	std::string rest;
+	std::tie(drive, rest) = ftxpath::splitdrive(abs);
+	
+	std::vector<std::string> path_list;
+	_split(rest, sep, path_list);
+
+	return std::make_tuple(drive, path_list);
+}
+#endif
+
 std::string ftxpath::relpath(const std::string &path, const std::string &start)
 {
 	std::string np = path;
