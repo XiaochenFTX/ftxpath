@@ -411,7 +411,7 @@ std::string ftxpath::commonprefix(std::vector<std::string> path_list)
     }
 
     std::vector<std::vector<std::string>> path_list_table;
-    size_t min_size = 999999; // ... short than 999999
+	size_t min_size = MAXUINT32;
     for (std::string path : path_list)
     {
         std::vector<std::string> list = _make_path_list(path);
