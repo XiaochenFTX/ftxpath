@@ -10,6 +10,9 @@
 bool test_isabs_check_abspath()
 {
     std::string abspath = "/a/b/c";
+#ifdef WIN32
+	abspath = "c:\\a\\b\\c";
+#endif
     return ftxpath::isabs(abspath);
 }
 

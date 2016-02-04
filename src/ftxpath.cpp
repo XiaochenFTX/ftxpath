@@ -60,8 +60,10 @@ bool ftxpath::isabs(const std::string &path)
 {
 #ifdef WIN32
 	std::string drive;
-	std::tie(drive, std::ignore) = splitdrive(path);
-	return drive != "" && (drive[0] == sep || drive[0] == altsep);
+	std::string p;
+	std::tie(drive, p) = splitdrive(path);
+
+	return drive != "" && p != "" && (p[0] == sep || p[0] == altsep);
 #else
     return path[0]=='/';
 #endif
