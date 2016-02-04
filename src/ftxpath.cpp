@@ -12,7 +12,9 @@
 
 #include <string>
 #include <cstdlib>
+#include <algorithm>
 #include <sys/stat.h>
+
 #ifdef WIN32
 #include <direct.h>
 #include <Windows.h>
@@ -25,8 +27,13 @@
 const std::string curdir = ".";
 const std::string pardir = "..";
 const std::string extsep = ".";
-const std::string sep = "/";
-
+#ifdef WIN32
+const char sep = '\\';
+const char altsep = '/';
+#else
+const char sep = '/';
+const char altsep = '';
+#endif
 
 
 std::string ftxpath::cwd()
@@ -51,12 +58,18 @@ std::string ftxpath::cwd()
 
 bool ftxpath::isabs(const std::string &path)
 {
+#ifdef WIN32
+	std::string drive;
+	std::tie(drive, std::ignore) = splitdrive(path);
+	return drive != "" && (drive[0] == sep || drive[0] == altsep);
+#else
     return path[0]=='/';
+#endif
 }
 
 void _join(std::string& lpath, const std::string& rpth)
 {
-    if (rpth[0] == '/')
+    if (ftxpath::isabs(rpth))
     {
         lpath = rpth;
     }
@@ -151,7 +164,7 @@ std::tuple<std::string, std::string> ftxpath::split(const std::string &path)
         return std::tuple<std::string, std::string>("", path);
     }
 
-    return std::tuple<std::string, std::string>(path.substr(0, pos), path.substr(pos + 1));
+	return std::make_tuple(path.substr(0, pos), path.substr(pos + 1));
 }
 
 std::string ftxpath::normpath(const std::string &path)
@@ -471,7 +484,7 @@ std::tuple<std::string, std::string> ftxpath::splitext(const std::string &path)
             auto filename_index = sep_index + 1;
             while (filename_index < dot_index)
             {
-                if (path.substr(filename_index, 1) != sep)
+                if (path.substr(filename_index, 1) != std::string("" + sep))
                 {
                     return std::make_tuple(path.substr(0, dot_index), path.substr(dot_index));
                 }
@@ -482,6 +495,65 @@ std::tuple<std::string, std::string> ftxpath::splitext(const std::string &path)
     }
 
     return std::make_tuple(path, std::string());
+}
+
+#ifdef WIN32
+std::tuple<std::string, std::string> _splitdrive_win32(const std::string&path)
+{
+	std::string drive = "";
+	std::string p = path;
+
+	if (p.size() > 1)
+	{
+		std::replace(p.begin(), p.end(), altsep, sep);
+		std::string normp = p;
+		if (normp.substr(0, 2) == std::string("" + sep) + sep
+			&& normp.substr(2, 1) != std::string("" + sep))
+		{
+			auto index = normp.find(sep, 2);
+			if (index == std::string::npos)
+			{
+				goto EMPTY_RETURN;
+			}
+
+			auto index2 = normp.find(sep, index + 1);
+			if (index2 == index + 1)
+			{
+				goto EMPTY_RETURN;
+			}
+
+			if (index2 == std::string::npos)
+			{
+				index2 = path.size();
+			}
+
+			drive = path.substr(0, index2);
+			std::string p = path.substr(index2);
+
+			return std::make_tuple(drive, p);
+		}
+
+		if (normp[1] == ':')
+		{
+			drive = path.substr(0, 2);
+			std::string p = path.substr(2);
+
+			return std::make_tuple(drive, p);
+		}
+	}
+
+EMPTY_RETURN:
+	return std::make_tuple(drive, path);
+}
+#endif
+
+std::tuple<std::string, std::string> ftxpath::splitdrive(const std::string&path)
+{
+#ifdef WIN32
+	return _splitdrive_win32(path);
+#else
+	return std::make_tuple("", path);
+#endif
 }
 
 int ftxpath::cd(const std::string &path) {
