@@ -497,7 +497,11 @@ void ftxpath::makedirs(const std::string &path) {
         temp_path = ftxpath::join(temp_path, node);
         if (!ftxpath::isdir(temp_path))
         {
+#ifdef WIN32
+			mkdir(temp_path.c_str());
+#else
             mkdir(temp_path.c_str(), ACCESSPERMS);
+#endif
         }
     }
 }

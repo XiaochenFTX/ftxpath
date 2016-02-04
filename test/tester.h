@@ -9,6 +9,10 @@
 #include <iostream>
 #include <cstdlib>
 
+#ifdef WIN32
+#include <direct.h>
+#endif
+
 #define TEST_BOOL_TO_BOOL(b, str)   \
 if (!b)                              \
 {                                   \
