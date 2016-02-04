@@ -461,7 +461,7 @@ ENDING:
 
     if (!common_path.empty())
     {
-        common_path = "/" + common_path;
+        common_path = std::string("" + sep) + common_path;
     }
 
     return common_path;
@@ -563,7 +563,17 @@ int ftxpath::cd(const std::string &path) {
 void ftxpath::makedirs(const std::string &path) {
     std::string abspath = ftxpath::normpath(ftxpath::abspath(path));
 
-    std::string temp_path = "/";
+    std::string temp_path = "";
+#ifdef WIN32
+	std::tie(temp_path, std::ignore) = splitdrive(abspath);
+	if (temp_path == "")
+	{
+		return;
+	}
+#else
+	temp_path = "" + sep;
+#endif
+
     for (auto node : _split(abspath, '/'))
     {
         temp_path = ftxpath::join(temp_path, node);
