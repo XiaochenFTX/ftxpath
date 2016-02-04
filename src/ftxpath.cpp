@@ -15,6 +15,7 @@
 #include <sys/stat.h>
 #ifdef WIN32
 #include <direct.h>
+#include <Windows.h>
 #else
 #include <dirent.h>
 #include <unistd.h>
@@ -255,26 +256,61 @@ std::string ftxpath::relpath(const std::string &path, const std::string &start)
     return rel_path;
 }
 
+#ifdef WIN32
+std::vector<std::string> _listdir_win32(const std::string &path)
+{
+	std::vector<std::string> list_dir;
+
+	std::string strFind = ftxpath::join(path, "*.*");
+	WIN32_FIND_DATAA FindFileData;
+	HANDLE hFind = FindFirstFileA(strFind.c_str(), &FindFileData);
+
+	if (INVALID_HANDLE_VALUE == hFind)
+	{
+		return list_dir;
+	}
+
+	do
+	{
+		std::string name = FindFileData.cFileName;
+		list_dir.push_back(name);
+	} while (FindNextFileA(hFind, &FindFileData));
+
+	FindClose(hFind);
+
+	return list_dir;
+}
+#else
+std::vector<std::string> _listdir_posix(const std::string &path)
+{
+	std::vector<std::string> list_dir;
+	DIR* pDir = opendir(path.c_str());
+	if (pDir != nullptr)
+	{
+		struct dirent *ent;
+		while ((ent = readdir(pDir)) != nullptr)
+		{
+			std::string name = ent->d_name;
+			if (name == curdir || name == pardir)
+			{
+				continue;
+			}
+			list_dir.push_back(ent->d_name);
+		}
+		closedir(pDir);
+	}
+
+	return list_dir;
+}
+#endif
+
 std::vector<std::string> ftxpath::listdir(const std::string &path)
 {
-    std::vector<std::string> list_dir;
-    DIR* pDir = opendir(path.c_str());
-    if (pDir != nullptr)
-    {
-        struct dirent *ent;
-        while ((ent=readdir(pDir)) != nullptr)
-        {
-            std::string name = ent->d_name;
-            if (name == curdir || name == pardir)
-            {
-                continue;
-            }
-            list_dir.push_back(ent->d_name);
-        }
-        closedir(pDir);
-    }
-    
-    return list_dir;
+#ifdef WIN32
+	return _listdir_win32(path);
+#else
+	return _listdir_posix(path);
+#endif
 }
 
 bool ftxpath::isdir(const std::string &path)

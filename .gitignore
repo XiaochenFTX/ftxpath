@@ -35,6 +35,8 @@
 *.opensdf
 *.sdf
 *.sln
+*.suo
+*.pdb
 ipch/
 Debug/
 Release/
