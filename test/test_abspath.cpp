@@ -11,12 +11,21 @@ bool test_abspath_absolute()
 {
     std::string abspath = "/a/b/c";
 
+#ifdef WIN32
+	abspath = "c:\\a\\b\\c";
+#endif
+
     return abspath == ftxpath::abspath(abspath);
 }
 
 bool test_abspath_relative()
 {
     std::string relpath = "a/b/c";
+
+#ifdef WIN32
+	relpath = "a\\b\\c";
+#endif
+
     std::string curpath = ftxpath::cwd();
     std::string abspath = ftxpath::join(curpath, relpath);
 
