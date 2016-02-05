@@ -168,57 +168,142 @@ std::tuple<std::string, std::string> ftxpath::split(const std::string &path)
 	return std::make_tuple(path.substr(0, pos), path.substr(pos + 1));
 }
 
+#ifdef WIN32
+#include <iostream>
+std::string _normpath_win32(const std::string& path)
+{
+	std::cout << "bbbb" << std::endl;
+	std::string backslash = "\\";
+	std::string dot = ".";
+
+	std::string np = path;
+	if (np.substr(0, 4) == "\\\\.\\" || np.substr(0, 4) == "\\\\?\\")
+	{
+		std::cout << "111111" << std::endl;
+		return path;
+	}
+	std::cout << "zzzzz" << std::endl;
+	std::replace(np.begin(), np.end(), '/', '\\');
+
+	std::string prefix;
+	std::string pth;
+	std::tie(prefix, pth) = ftxpath::splitdrive(np);
+
+	if (pth.empty())
+	{
+		std::cout << "222222222" << std::endl;
+		return prefix;
+	}
+	std::cout << "zzzzz" << std::endl;
+	while (pth.substr(0, 1) == "\\")
+	{
+		prefix = prefix + backslash;
+		pth = pth.substr(1);
+	}
+
+	std::vector<std::string> comps;
+	_split(pth, '\\', comps);
+	std::cout << "zzzzz" << std::endl;
+	int i = 0;
+	while (i < comps.size())
+	{
+		if (comps[i] == "." || comps[i] == "")
+		{
+			comps.erase(comps.begin() + i);
+		}
+		else if (comps[i] == "..")
+		{
+			if (i > 0 && comps[i - 1] != "..")
+			{
+				comps.erase(comps.begin() + i - 1);
+				comps.erase(comps.begin() + i - 1);
+				--i;
+			}
+			else if (i == 0 && *(prefix.rbegin()) == '\\')
+			{
+				comps.erase(comps.begin() + i);
+			}
+			else
+			{
+				++i;
+			}
+		}
+		else
+		{
+			++i;
+		}
+	}
+
+	std::cout << "zzzzz" << std::endl;
+
+	std::string nromp = prefix + ftxpath::join(backslash, comps);
+
+	std::cout << "nrom: " << nromp << std::endl;
+
+	return nromp;
+}
+#else
+std::string _normpath_posix(const std::string& path)
+{
+	if (path.empty())
+	{
+		return curdir;
+	}
+
+	int initial_slashes = 0;
+	if (path[0] == '/')
+	{
+		initial_slashes = 1;
+	}
+
+	if (initial_slashes == 1 && path[1] == '/' && path[2] != '/')
+	{
+		initial_slashes = 2;
+	}
+
+	std::vector<std::string> comps;
+	_split(path, '/', comps);
+
+	std::vector<std::string> new_comps;
+	for (auto comp : comps)
+	{
+		if (comp.empty() || comp == curdir)
+		{
+			continue;
+		}
+
+		if (comp != pardir || (initial_slashes == 0 && new_comps.empty()) || (!new_comps.empty() && *(new_comps.crbegin()) == pardir))
+		{
+			new_comps.push_back(comp);
+		}
+		else if (!new_comps.empty())
+		{
+			new_comps.pop_back();
+		}
+	}
+
+	std::string slash = "/";
+	std::string norm_path;
+	if (initial_slashes != 0)
+	{
+		for (int i = 0; i < initial_slashes; ++i)
+		{
+			norm_path += slash;
+		}
+	}
+
+	norm_path += _join_str(slash, new_comps);
+	return norm_path;
+}
+#endif
+
 std::string ftxpath::normpath(const std::string &path)
 {
-    if (path.empty())
-    {
-        return curdir;
-    }
-    
-    int initial_slashes = 0;
-    if (path[0] == '/')
-    {
-        initial_slashes = 1;
-    }
-    
-    if (initial_slashes == 1 && path[1] == '/' && path[2] != '/')
-    {
-        initial_slashes = 2;
-    }
-    
-    std::vector<std::string> comps;
-    _split(path, '/', comps);
-    
-    std::vector<std::string> new_comps;
-    for (auto comp : comps)
-    {
-        if (comp.empty() || comp == curdir)
-        {
-            continue;
-        }
-        
-        if (comp != pardir || (initial_slashes == 0 && new_comps.empty()) || (!new_comps.empty() && *(new_comps.crbegin()) == pardir))
-        {
-            new_comps.push_back(comp);
-        }
-        else if (!new_comps.empty())
-        {
-            new_comps.pop_back();
-        }
-    }
-    
-    std::string slash = "/";
-    std::string norm_path;
-    if (initial_slashes != 0)
-    {
-        for (int i = 0; i < initial_slashes; ++i)
-        {
-            norm_path += slash;
-        }
-    }
-    
-    norm_path += _join_str(slash, new_comps);
-    return norm_path;
+#ifdef WIN32
+	return _normpath_win32(path);
+#else
+	return _normpath_posix(path);
+#endif
 }
 
 std::string ftxpath::abspath(const std::string &path)
