@@ -10,6 +10,11 @@
 bool test_normpath_normal()
 {
     std::string path = "/a/b/c";
+
+#ifdef WIN32
+	path = "\\a\\b\\c";
+#endif
+
     return path == ftxpath::normpath(path);
 }
 
@@ -18,6 +23,10 @@ bool test_normpath_pardir()
     std::string path = "../a/b/c/../..";
     std::string normpath = "../a";
 
+#ifdef WIN32
+	normpath = "..\\a";
+#endif
+
     return normpath == ftxpath::normpath(path);
 }
 
@@ -25,6 +34,10 @@ bool test_normpath_curdir()
 {
     std::string path = "./a/b";
     std::string normpath = "a/b";
+
+#ifdef WIN32
+	normpath = "a\\b";
+#endif
 
     return normpath == ftxpath::normpath(path);
 }
