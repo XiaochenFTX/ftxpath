@@ -13,12 +13,7 @@
 std::string mycwd()
 {
 	char* buff = nullptr;
-    
-#ifdef WIN32
-	buff = _getcwd(nullptr, 0);
-#else
 	buff = getcwd(nullptr, 0);
-#endif
 
 	std::string path(buff);
 	
@@ -37,7 +32,7 @@ bool test_cwd_isdir(std::string path)
 }
 
 bool test_cwd() {
-    std::string str_cwd = ftxpath::cwd();
+	std::string str_cwd = ftx::path::cwd();
 
     LOG_TEST_STRING(str_cwd);
 

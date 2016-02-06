@@ -35,15 +35,33 @@ const char sep = '/';
 #endif
 
 
+using namespace ftx;
+
+std::string path::cwd()
+{
+	char* buff = nullptr;
+	buff = getcwd(nullptr, 0);
+
+	std::string path(buff);
+
+	if (buff != nullptr)
+	{
+		free(buff);
+	}
+
+	return path;
+}
+
+
 std::string ftxpath::cwd()
 {
 	char* buff = nullptr;
 
-#ifdef WIN32
-	buff = _getcwd(nullptr, 0);
-#else
+//#ifdef WIN32
+//	buff = _getcwd(nullptr, 0);
+//#else
     buff = getcwd(nullptr, 0);
-#endif
+//#endif
 
 	std::string path(buff);
 

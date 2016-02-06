@@ -14,6 +14,13 @@
 #include <functional>
 #include "Generator.h"
 
+namespace ftx {
+	class path {
+	public:
+		static std::string cwd();
+	};
+}
+
 namespace ftxpath {
     
     std::string cwd();
