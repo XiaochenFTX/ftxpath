@@ -28,6 +28,9 @@ namespace ftx {
 
 		static std::string join(const std::string&, const std::string&);
 		static std::string join(const std::string&, const std::vector<std::string>&);
+
+		static std::string basename(const std::string&);
+		static std::string dirname(const std::string&);
 	};
 }
 

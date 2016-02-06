@@ -398,6 +398,7 @@ std::string path::join(const std::string &lpath, const std::string &rpath)
 	return _join_posix(lpath, rpath);
 #endif
 }
+
 std::string path::join(const std::string &lpath, const std::vector<std::string> &rpaths)
 {
 #ifdef WIN32
@@ -405,6 +406,22 @@ std::string path::join(const std::string &lpath, const std::vector<std::string> 
 #else
 	return _join_posix(lpath, rpaths);
 #endif
+}
+
+std::string path::basename(const std::string &path)
+{
+	std::string basename;
+	std::tie(std::ignore, basename) = split(path);
+
+	return basename;
+}
+
+std::string path::dirname(const std::string &path)
+{
+	std::string dirname;
+	std::tie(dirname, std::ignore) = split(path);
+
+	return dirname;
 }
 
 // =============================================================
