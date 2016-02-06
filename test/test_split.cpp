@@ -13,7 +13,7 @@ bool test_split_path()
     std::string res1 = "/a/b";
     std::string res2 = "c";
 
-    auto tuple = ftxpath::split(path);
+	auto tuple = ftx::path::split(path);
 
     return res1 == std::get<0>(tuple) && res2 == std::get<1>(tuple);
 }
@@ -22,7 +22,7 @@ bool test_split_onename()
 {
     std::string name = "name";
 
-    auto tuple = ftxpath::split(name);
+	auto tuple = ftx::path::split(name);
 
     return std::get<0>(tuple).empty() && name == std::get<1>(tuple);
 }
@@ -32,7 +32,7 @@ bool test_split_folderpath()
     std::string folderpath = "a/b/c/";
     std::string basename = "a/b/c";
 
-    auto tuple = ftxpath::split(folderpath);
+	auto tuple = ftx::path::split(folderpath);
 
     return basename == std::get<0>(tuple) && std::get<1>(tuple).empty();
 }
@@ -41,7 +41,7 @@ bool test_split_root()
 {
     std::string root = "/";
 
-    auto tuple = ftxpath::split(root);
+	auto tuple = ftx::path::split(root);
 
     return root == std::get<0>(tuple) && std::get<1>(tuple).empty();
 }

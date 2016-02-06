@@ -52,11 +52,6 @@ std::string path::cwd()
 	return path;
 }
 
-std::tuple<std::string, std::string> path::split(const std::string &path)
-{
-
-}
-
 std::tuple<std::string, std::string> path::splitext(const std::string &path)
 {
 	auto sep_index = path.rfind(sep);
@@ -66,7 +61,17 @@ std::tuple<std::string, std::string> path::splitext(const std::string &path)
 	if (altsep != 0)
 	{
 		auto altsep_index = path.rfind(altsep);
-		sep_index = max(sep_index, altsep_index);
+		if (altsep_index != std::string::npos)
+		{
+			if (sep_index == std::string::npos)
+			{
+				sep_index = altsep_index;
+			}
+			else
+			{
+				sep_index = max(sep_index, altsep_index);
+			}
+		}
 	}
 #endif
 
@@ -82,7 +87,8 @@ std::tuple<std::string, std::string> path::splitext(const std::string &path)
 			auto filename_index = sep_index + 1;
 			while (filename_index < dot_index)
 			{
-				if (path.substr(filename_index, 1) != std::string("" + sep))
+				auto c = path[filename_index];
+				if (c != sep && c != altsep)
 				{
 					return std::make_tuple(path.substr(0, dot_index), path.substr(dot_index));
 				}
@@ -105,8 +111,8 @@ std::tuple<std::string, std::string> _splitdrive_win32(const std::string&path)
 	{
 		std::replace(np.begin(), np.end(), altsep, sep);
 		std::string normp = np;
-		if (normp.substr(0, 2) == std::string("" + sep) + sep
-			&& normp.substr(2, 1) != std::string("" + sep))
+		if (normp.substr(0, 2) == std::string() + sep + sep
+			&& normp.substr(2, 1) != std::string() + sep)
 		{
 			auto index = normp.find(sep, 2);
 			if (index == std::string::npos)
@@ -126,7 +132,7 @@ std::tuple<std::string, std::string> _splitdrive_win32(const std::string&path)
 			}
 
 			drive = path.substr(0, index2);
-			std::string p = path.substr(index2);
+			std::string p = path.substr(index2 + 1);
 
 			return std::make_tuple(drive, p);
 		}
@@ -134,7 +140,7 @@ std::tuple<std::string, std::string> _splitdrive_win32(const std::string&path)
 		if (normp[1] == ':')
 		{
 			drive = path.substr(0, 2);
-			std::string p = path.substr(2);
+			std::string p = path.substr(2 + 1);
 
 			return std::make_tuple(drive, p);
 		}
@@ -151,6 +157,88 @@ std::tuple<std::string, std::string> path::splitdrive(const std::string &path)
 	return _splitdrive_win32(path);
 #else
 	return std::make_tuple("", path);
+#endif
+}
+
+#ifdef WIN32
+std::tuple<std::string, std::string> _split_win32(const std::string &path)
+{
+	std::string drive;
+	std::string rest;
+
+	std::tie(drive, rest) = _splitdrive_win32(path);
+
+	auto index = rest.size();
+	while (index != 0)
+	{
+		auto c = rest[index - 1];
+		if (c == sep || c == altsep)
+		{
+			break;
+		}
+
+		--index;
+	}
+
+	std::string head = rest.substr(0, index);
+	std::string tail = rest.substr(index);
+
+	std::string head2 = head;
+	while (!head2.empty())
+	{
+		auto c = *(head2.rbegin());
+		if (c == sep || c == altsep)
+		{
+			head2 = head2.substr(0, head2.size() - 1);
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	if (!head2.empty())
+	{
+		head = head2;
+	}
+
+	return std::make_tuple(drive + head, tail);
+}
+#else
+std::tuple<std::string, std::string> _split_posix(const std::string &path)
+{
+	auto pos = path.find_last_of(sep);
+
+	if (pos == std::string::npos)
+	{
+		return std::tuple<std::string, std::string>("", path);
+	}
+
+	std::string head = path.substr(0, pos);
+	std::string tail = path.substr(pos);
+
+	for (auto c : head)
+	{
+		if (c != sep)
+		{
+			if (*(head.rbegin()) == sep)
+			{
+				head = head.substr(0, head.size() - 1);
+			}
+			return std::make_tuple(head, tail);
+		}
+	}
+
+	return std::tuple<std::string, std::string>(path, "");
+}
+#endif
+
+std::tuple<std::string, std::string> path::split(const std::string &path)
+{
+#ifdef WIN32
+	return _split_win32(path);
+#else
+	return _split_posix(path);
 #endif
 }
 
