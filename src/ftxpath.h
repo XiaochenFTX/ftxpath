@@ -33,6 +33,7 @@ namespace ftx {
 		static std::string dirname(const std::string&);
 
 		static std::string normpath(const std::string&);
+		static std::string abspath(const std::string&);
 	};
 }
 

@@ -15,7 +15,7 @@ bool test_abspath_absolute()
 	abspath = "c:\\a\\b\\c";
 #endif
 
-    return abspath == ftxpath::abspath(abspath);
+    return abspath == ftx::path::abspath(abspath);
 }
 
 bool test_abspath_relative()
@@ -26,10 +26,10 @@ bool test_abspath_relative()
 	relpath = "a\\b\\c";
 #endif
 
-    std::string curpath = ftxpath::cwd();
-    std::string abspath = ftxpath::join(curpath, relpath);
+	std::string curpath = ftx::path::cwd();
+	std::string abspath = ftx::path::join(curpath, relpath);
 
-    return abspath == ftxpath::abspath(relpath);
+	return abspath == ftx::path::abspath(relpath);
 }
 
 bool test_abspath() {

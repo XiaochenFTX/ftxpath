@@ -599,6 +599,24 @@ std::string path::normpath(const std::string &path)
 #endif
 }
 
+std::string path::abspath(const std::string &path)
+{
+	std::string abs_path = path;
+
+#ifdef WIN32
+	char** lppPart = { NULL };
+	char out_path[MAX_PATH];
+	GetFullPathNameA(abs_path.c_str(), MAX_PATH, out_path, lppPart);
+	abs_path = out_path;
+#endif
+
+	if (!isabs(abs_path))
+	{
+		abs_path = join(cwd(), abs_path);
+	}
+
+	return normpath(abs_path);
+}
 
 // =============================================================
 std::string ftxpath::cwd()
