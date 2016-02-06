@@ -31,6 +31,8 @@ namespace ftx {
 
 		static std::string basename(const std::string&);
 		static std::string dirname(const std::string&);
+
+		static std::string normpath(const std::string&);
 	};
 }
 

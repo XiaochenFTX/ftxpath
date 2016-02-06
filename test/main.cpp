@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 	CASE_ONE_TEST_BY_ARGV1("splitext", test_splitext());
 	CASE_ONE_TEST_BY_ARGV1("splitdrive", test_splitdrive());
     CASE_ONE_TEST_BY_ARGV1("split", test_split());
-    //CASE_ONE_TEST_BY_ARGV1("normpath", test_normpath());
+    CASE_ONE_TEST_BY_ARGV1("normpath", test_normpath());
     //CASE_ONE_TEST_BY_ARGV1("abspath", test_abspath());
     //CASE_ONE_TEST_BY_ARGV1("relpath", test_relpath());
     //CASE_ONE_TEST_BY_ARGV1("listdir", test_listdir());
