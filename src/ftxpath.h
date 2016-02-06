@@ -23,6 +23,8 @@ namespace ftx {
 		static std::tuple<std::string, std::string> splitext(const std::string&);
 		static std::tuple<std::string, std::string> splitdrive(const std::string&);
 		static std::tuple<std::string, std::string> split(const std::string&);
+
+		static bool isabs(const std::string&);
 	};
 }
 

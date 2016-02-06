@@ -12,7 +12,7 @@ bool test_splitdrive_normal()
 {
 	std::string path = "c:/a/b";
 	std::string head = "c:";
-	std::string tail = "a/b";
+	std::string tail = "/a/b";
 
 	auto tuple = ftx::path::splitdrive(path);
 
@@ -29,9 +29,11 @@ bool test_splitdrive_unc()
 {
 	std::string path = "//machine/share/a/b/c";
 	std::string head = "//machine/share";
-	std::string tail = "a/b/c";
+	std::string tail = "/a/b/c";
 
 	auto tuple = ftx::path::splitdrive(path);
+
+	std::cout << std::get<0>(tuple) << "\n" << std::get<1>(tuple) << std::endl;
 
 #ifdef WIN32
 	return head == std::get<0>(tuple) && tail == std::get<1>(tuple);

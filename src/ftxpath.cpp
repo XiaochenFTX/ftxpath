@@ -132,7 +132,7 @@ std::tuple<std::string, std::string> _splitdrive_win32(const std::string&path)
 			}
 
 			drive = path.substr(0, index2);
-			std::string p = path.substr(index2 + 1);
+			std::string p = path.substr(index2);
 
 			return std::make_tuple(drive, p);
 		}
@@ -140,7 +140,7 @@ std::tuple<std::string, std::string> _splitdrive_win32(const std::string&path)
 		if (normp[1] == ':')
 		{
 			drive = path.substr(0, 2);
-			std::string p = path.substr(2 + 1);
+			std::string p = path.substr(2);
 
 			return std::make_tuple(drive, p);
 		}
@@ -239,6 +239,18 @@ std::tuple<std::string, std::string> path::split(const std::string &path)
 	return _split_win32(path);
 #else
 	return _split_posix(path);
+#endif
+}
+#include <iostream>
+bool path::isabs(const std::string &path)
+{
+#ifdef WIN32
+	std::string p;
+	std::tie(std::ignore, p) = splitdrive(path);
+
+	return p != "" && (p[0] == sep || p[0] == altsep);
+#else
+	return path[0] == sep;
 #endif
 }
 
