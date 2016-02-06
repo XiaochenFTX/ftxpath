@@ -38,7 +38,7 @@ const char sep = '/';
 
 using namespace ftx;
 
-std::string path::cwd()
+std::string _cwd()
 {
 	char* buff = nullptr;
 	buff = getcwd(nullptr, 0);
@@ -51,6 +51,11 @@ std::string path::cwd()
 	}
 
 	return path;
+}
+
+std::string path::cwd()
+{
+	return _cwd();
 }
 
 std::tuple<std::string, std::string> path::splitext(const std::string &path)
@@ -599,24 +604,229 @@ std::string path::normpath(const std::string &path)
 #endif
 }
 
-std::string path::abspath(const std::string &path)
+#ifdef WIN32
+std::string _abspath_win32(const std::string &path)
 {
 	std::string abs_path = path;
 
-#ifdef WIN32
 	char** lppPart = { NULL };
-	char out_path[MAX_PATH];
+	char out_path[MAX_PATH] = {0};
 	GetFullPathNameA(abs_path.c_str(), MAX_PATH, out_path, lppPart);
 	abs_path = out_path;
-#endif
 
-	if (!isabs(abs_path))
+	if (!_isabs_win32(abs_path))
 	{
-		abs_path = join(cwd(), abs_path);
+		abs_path = _join_win32(_cwd(), abs_path);
 	}
 
-	return normpath(abs_path);
+	return _normpath_win32(abs_path);
 }
+#else
+std::string _abspath_posix(const std::string &path)
+{
+	std::string abs_path = path;
+
+	if (!_isabs_posix(abs_path))
+	{
+		abs_path = _join_posix(_cwd(), abs_path);
+	}
+
+	return _normpath_posix(abs_path);
+}
+#endif
+
+std::string path::abspath(const std::string &path)
+{
+#ifdef WIN32
+	return _abspath_win32(path);
+#else
+	return _abspath_posix(path);
+#endif
+}
+
+#ifdef WIN32
+std::tuple<std::string, std::string> _splitunc_win32(const std::string &path)
+{
+	std::string firstTwo;
+	if (path[1] == ':')
+	{
+		goto EMPTY_PATH_TUPLE;
+	}
+
+	firstTwo = path.substr(0, 2);
+	if (firstTwo == "//" || firstTwo == "\\\\")
+	{
+		std::string normp = path;
+		std::replace(normp.begin(), normp.end(), '\\', '/');
+
+		auto index = normp.find('/', 2);
+		if (index <= 2)
+		{
+			goto EMPTY_PATH_TUPLE;
+		}
+
+		auto index2 = normp.find('/', index + 1);
+		if (index2 == index + 1)
+		{
+			goto EMPTY_PATH_TUPLE;
+		}
+
+		if (index2 == std::string::npos)
+		{
+			index2 = path.size();
+		}
+
+		return std::make_tuple(path.substr(0, index2), path.substr(index2));
+	}
+
+EMPTY_PATH_TUPLE:
+	return std::make_tuple(std::string(), path);
+}
+
+std::tuple<bool, std::string, std::vector<std::string>> _abspath_split(const std::string  path)
+{
+	std::string abs = _abspath_win32(_normpath_win32(path));
+	
+	std::string drive;
+	std::string rest;
+
+	std::tie(drive, rest) = _splitunc_win32(abs);
+	bool is_unc = !drive.empty();
+	if (!is_unc)
+	{
+		std::tie(drive, rest) = _splitdrive_win32(abs);
+	}
+	
+	std::vector<std::string> path_list;
+	_split(rest, sep, path_list);
+
+	return std::make_tuple(is_unc, drive, path_list);
+}
+
+std::string _relpath_win32(const std::string &path, const std::string &start)
+{
+	std::string np = path;
+	std::string ns = start.empty() ? curdir : start;
+
+	if (path.empty())
+	{
+		return path;
+	}
+	
+	bool s_is_unc, p_is_unc;
+	std::string s_prefix, p_prefix;
+	std::vector<std::string> s_list, p_list;
+	std::tie(s_is_unc, s_prefix, s_list) = _abspath_split(start);
+	std::tie(p_is_unc, p_prefix, p_list) = _abspath_split(path);
+	
+	if (s_is_unc ^ p_is_unc)
+	{
+		return path;
+	}
+	
+	std::string lower_sprefix = s_prefix;
+	std::string lower_pprefix = p_prefix;
+	std::transform(lower_sprefix.begin(), lower_sprefix.end(), lower_sprefix.begin(), std::tolower);
+	std::transform(lower_pprefix.begin(), lower_pprefix.end(), lower_pprefix.begin(), std::tolower);
+	
+	if (lower_sprefix != lower_pprefix)
+	{
+		return path;
+	}
+	
+	int i = 0;
+	int end = min(s_list.size(), p_list.size());
+	for (; i < end; ++i)
+	{
+		std::string lower_snode = s_list[i];
+		std::string lower_pnode = p_list[i];
+		std::transform(lower_snode.begin(), lower_snode.end(), lower_snode.begin(), std::tolower);
+		std::transform(lower_pnode.begin(), lower_pnode.end(), lower_pnode.begin(), std::tolower);
+
+		if (lower_snode != lower_pnode)
+		{
+			break;
+		}
+	}
+	
+	std::vector<std::string> rel_list;
+	for (int j = s_list.size() - i; j > 0; --j)
+	{
+		rel_list.push_back(pardir);
+	}
+	
+	for (int k = i; k < p_list.size(); ++k)
+	{
+		rel_list.push_back(p_list[k]);
+	}
+
+	if (rel_list.empty())
+	{
+		return curdir;
+	}
+
+	std::string rel_path = rel_list[0];
+	for (int i = 1; i < rel_list.size(); ++i)
+	{
+		rel_path += sep;
+		rel_path += rel_list[i];
+	}
+
+	return rel_path;
+}
+#else
+std::string _relpath_posix(const std::string &path, const std::string &start)
+{
+	std::string np = path;
+	std::string ns = start.empty() ? curdir : start;
+
+	std::vector<std::string> path_list;
+	_split(_abspath_posix(np), sep, path_list);
+
+	std::vector<std::string> start_list;
+	_split(_abspath_posix(ns), sep, start_list);
+
+	std::vector<std::string> rel_list;
+
+	auto path_it = path_list.cbegin();
+	auto start_it = start_list.cbegin();
+	for (; path_it != path_list.cend() && start_it != start_list.cend(); ++path_it, ++start_it)
+	{
+		if (*path_it != *start_it)
+		{
+			break;
+		}
+	}
+
+	for (; start_it != start_list.cend(); ++start_it)
+	{
+		rel_list.push_back(pardir);
+	}
+
+	for (; path_it != path_list.cend(); ++path_it)
+	{
+		rel_list.push_back(*path_it);
+	}
+
+	std::string rel_path;
+	for (auto node : rel_list)
+	{
+		_join(rel_path, node);
+	}
+
+	return rel_path;
+}
+#endif
+
+std::string path::relpath(const std::string &path, const std::string &start)
+{
+#ifdef WIN32
+	return _relpath_win32(path, start);
+#else
+	return _relpath_posix(path, start);
+#endif
+}
+
 
 // =============================================================
 std::string ftxpath::cwd()
@@ -875,21 +1085,6 @@ std::string ftxpath::abspath(const std::string &path)
     }
     return normpath(abs_path);
 }
-
-#ifdef WIN32
-std::tuple<std::string, std::vector<std::string>> _abspath_split(const std::string& path)
-{
-	std::string abs = ftxpath::abspath(ftxpath::normpath(path));
-	std::string drive;
-	std::string rest;
-	std::tie(drive, rest) = ftxpath::splitdrive(abs);
-	
-	std::vector<std::string> path_list;
-	_split(rest, sep, path_list);
-
-	return std::make_tuple(drive, path_list);
-}
-#endif
 
 std::string ftxpath::relpath(const std::string &path, const std::string &start)
 {
