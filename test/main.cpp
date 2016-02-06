@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 
     CASE_ONE_TEST_BY_ARGV1("cwd", test_cwd());
     CASE_ONE_TEST_BY_ARGV1("isabs", test_isabs());
-    //CASE_ONE_TEST_BY_ARGV1("join", test_join());
+    CASE_ONE_TEST_BY_ARGV1("join", test_join());
     //CASE_ONE_TEST_BY_ARGV1("basename", test_basename());
     //CASE_ONE_TEST_BY_ARGV1("dirname", test_dirname());
 	CASE_ONE_TEST_BY_ARGV1("splitext", test_splitext());

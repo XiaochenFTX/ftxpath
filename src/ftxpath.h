@@ -25,6 +25,9 @@ namespace ftx {
 		static std::tuple<std::string, std::string> split(const std::string&);
 
 		static bool isabs(const std::string&);
+
+		static std::string join(const std::string&, const std::string&);
+		static std::string join(const std::string&, const std::vector<std::string>&);
 	};
 }
 

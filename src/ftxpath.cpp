@@ -12,6 +12,7 @@
 
 #include <string>
 #include <cstdlib>
+#include <cctype>
 #include <algorithm>
 #include <sys/stat.h>
 
@@ -241,16 +242,168 @@ std::tuple<std::string, std::string> path::split(const std::string &path)
 	return _split_posix(path);
 #endif
 }
-#include <iostream>
+
+#ifdef WIN32
+bool _isabs_win32(const std::string &path)
+{
+	std::string p;
+	std::tie(std::ignore, p) = _splitdrive_win32(path);
+
+	return p != "" && (p[0] == sep || p[0] == altsep);
+}
+#else
+bool _isabs_posix(const std::string &path)
+{
+	return path[0] == sep;
+}
+#endif
+
 bool path::isabs(const std::string &path)
 {
 #ifdef WIN32
-	std::string p;
-	std::tie(std::ignore, p) = splitdrive(path);
-
-	return p != "" && (p[0] == sep || p[0] == altsep);
+	return _isabs_win32(path);
 #else
-	return path[0] == sep;
+	return _isabs_posix(path);
+#endif
+}
+
+#ifdef WIN32
+void _join_two_win32(std::string &result_drive, std::string &result_path, const std::string &rpath)
+{
+	std::string pdrive;
+	std::string ppath;
+	std::tie(pdrive, ppath) = _splitdrive_win32(rpath);
+	if (!ppath.empty())
+	{
+		auto c = ppath[0];
+		if (c == sep || c == altsep)
+		{
+			if (!pdrive.empty() && result_drive.empty())
+			{
+				result_drive = pdrive;
+			}
+			result_path = ppath;
+			return;
+		}
+	}
+	else if (!pdrive.empty() && pdrive != result_drive)
+	{
+		std::string lower_pdrive = pdrive;
+		std::string lower_lpath = result_drive;
+		std::transform(lower_pdrive.begin(), lower_pdrive.end(), lower_pdrive.begin(), std::tolower);
+		std::transform(lower_lpath.begin(), lower_lpath.end(), lower_lpath.begin(), std::tolower);
+		if (lower_pdrive != lower_lpath)
+		{
+			result_drive = pdrive;
+			result_path = ppath;
+			return;
+		}
+		result_drive = pdrive;
+	}
+
+	if (!result_path.empty())
+	{
+		auto c = *(result_path.rbegin());
+		if (c != sep && c != altsep)
+		{
+			result_path += sep;
+		}
+		result_path += ppath;
+	}
+}
+
+std::string _join_win32(const std::string &lpath, const std::string &rpath)
+{
+	std::string result_drive;
+	std::string result_path;
+	std::tie(result_drive, result_path) = _splitdrive_win32(lpath);
+	_join_two_win32(result_drive, result_path, rpath);
+
+	if (!result_drive.empty() && !result_path.empty())
+	{
+		auto pc = result_path[0];
+		auto dc = *(result_drive.rbegin());
+		if (pc != sep && pc != altsep && dc != ':')
+		{
+			return result_drive + sep + result_path;
+		}
+	}
+
+	return result_drive + result_path;
+}
+
+std::string _join_win32(const std::string &lpath, const std::vector<std::string> &rpaths)
+{
+	std::string result_drive;
+	std::string result_path;
+	std::tie(result_drive, result_path) = _splitdrive_win32(lpath);
+	for (auto rp : rpaths)
+	{
+		_join_two_win32(result_drive, result_path, rp);
+	}
+
+	if (!result_drive.empty() && !result_path.empty())
+	{
+		auto pc = result_path[0];
+		auto dc = *(result_drive.rbegin());
+		if (pc != sep && pc != altsep && dc != ':')
+		{
+			return result_drive + sep + result_path;
+		}
+	}
+
+	return result_drive + result_path;
+}
+#else
+void _join_two_posix(const std::string &lpath, const std::string &rpath)
+{
+	if (_isabs_posix(rpath))
+	{
+		lpath = rpath;
+	}
+	else if (lpath.empty() || *(lpath.rbegin()) == sep || *(lpath.rbegin()) == altsep)
+	{
+		lpath += rpath;
+	}
+	else
+	{
+		lpath += sep + rpath;
+	}
+}
+
+std::string _join_posix(const std::string &lpath, const std::string &rpath)
+{
+	std::string path = lpath;
+	_join_two_posix(path, rpath);
+	return path;
+}
+
+std::string _join_posix(const std::string &lpath, const std::vector<std::string> &rpaths)
+{
+	std::string path = lpath;
+	for (auto rp : rpaths)
+	{
+		_join_two_posix(path, rp);
+	}
+
+	return path;
+}
+#endif
+
+std::string path::join(const std::string &lpath, const std::string &rpath)
+{
+#ifdef WIN32
+	return _join_win32(lpath, rpath);
+#else
+	return _join_posix(lpath, rpath);
+#endif
+}
+std::string path::join(const std::string &lpath, const std::vector<std::string> &rpaths)
+{
+#ifdef WIN32
+	return _join_win32(lpath, rpaths);
+#else
+	return _join_posix(lpath, rpaths);
 #endif
 }
 
