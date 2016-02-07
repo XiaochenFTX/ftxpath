@@ -827,6 +827,184 @@ std::string path::relpath(const std::string &path, const std::string &start)
 #endif
 }
 
+void _make_path_list(const std::string& path, std::vector<std::string>& path_list)
+{
+#ifdef WIN32
+	std::string abspath = _normpath_win32(_abspath_win32(path));
+	std::tie(std::ignore, abspath) = _splitdrive_win32(abspath);
+#else
+	std::string abspath =  _normpath_posix(_abspath_posix(path));
+#endif
+	
+	_split(abspath, sep, path_list);
+	std::remove_if(path_list.begin(), path_list.end(), [](const std::string &node){
+		return node.empty();
+	});
+}
+
+std::vector<std::string> _make_path_list(const std::string& path)
+{
+	std::vector<std::string> path_list;
+	_make_path_list(path, path_list);
+	return path_list;
+}
+
+std::string path::commonprefix(const std::string &path1, const std::string &path2)
+{
+	if (path1.empty() || path2.empty())
+	{
+		return std::string();
+	}
+
+	std::string p1 = path1;
+	std::string p2 = path2;
+
+#ifdef WIN32
+	std::string drive1, drive2;
+	std::tie(drive1, p1) = _splitdrive_win32(_abspath_win32(p1));
+	std::tie(drive2, p2) = _splitdrive_win32(_abspath_win32(p2));
+
+	if (drive1 != drive2)
+	{
+		return std::string();
+	}
+#endif
+
+	std::vector<std::string> path1_list = _make_path_list(p1);
+	std::vector<std::string> path2_list = _make_path_list(p2);
+
+	std::vector<std::string> common_list;
+	for (auto i = 0; i < path1_list.size() && i < path2_list.size(); ++i)
+	{
+		std::string node1 = path1_list[i];
+		std::string node2 = path2_list[i];
+		if (node1 == node2)
+		{
+			common_list.push_back(node1);
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	std::string common_path;
+
+#ifdef WIN32
+	if (!drive1.empty())
+	{
+		common_path += drive1;
+	}
+
+	common_path += sep;
+	common_path = _join_win32(common_path, common_list);
+#else
+	common_path += sep;
+	common_path = _join_posix(common_path, common_list);
+#endif
+
+	return common_path;
+}
+
+std::string path::commonprefix(const std::vector<std::string> &path_list)
+{
+	if (path_list.empty())
+	{
+		return std::string();
+	}
+
+	std::vector<std::string> paths = path_list;
+#ifdef WIN32
+	std::string common_drive;
+	bool is_init = false;
+	std::vector<std::string> tails;
+#endif
+	for (std::string path : paths)
+	{
+		if (path.empty())
+		{
+			return std::string();
+		}
+
+#ifdef WIN32
+		std::string drive;
+		std::string tail;
+		std::tie(drive, tail) = _splitdrive_win32(_abspath_win32(path));
+
+		if (!is_init)
+		{
+			common_drive = drive;
+			is_init = true;
+		}
+		else
+		{
+			if (drive != common_drive)
+			{
+				return std::string();
+			}
+		}
+
+		tails.push_back(tail);
+	}
+
+	paths = tails;
+#else
+	}
+#endif
+
+	std::vector<std::vector<std::string>> path_list_table;
+	size_t min_size = MAXUINT32;
+	for (std::string path : paths)
+	{
+		std::vector<std::string> list = _make_path_list(path);
+		if (list.size() < min_size)
+		{
+			min_size = list.size();
+		}
+		path_list_table.push_back(list);
+	}
+
+	std::vector<std::string> common_list;
+	for (auto i = 0; i < min_size; ++i)
+	{
+		std::string common_node;
+		for (auto list : path_list_table)
+		{
+			std::string node = list[i];
+			if (common_node.empty())
+			{
+				common_node = node;
+				continue;
+			}
+
+			if (node != common_node)
+			{
+				goto ENDING;
+			}
+		}
+
+		common_list.push_back(common_node);
+	}
+
+ENDING:
+
+	std::string common_path;
+
+#ifdef WIN32
+	if (!common_drive.empty())
+	{
+		common_path += common_drive;
+	}
+
+	common_path += sep;
+	common_path = _join_win32(common_path, common_list);
+#else
+	common_path += sep;
+	common_path = _join_posix(common_path, common_list);
+#endif
+
+	return common_path;
+}
 
 // =============================================================
 std::string ftxpath::cwd()
@@ -1224,19 +1402,6 @@ bool ftxpath::exists(const std::string &path)
 {
     struct stat buf;
     return stat(path.c_str(), &buf) == 0;
-}
-
-void _make_path_list(const std::string& path, std::vector<std::string>& path_list)
-{
-    std::string abspath = ftxpath::normpath(ftxpath::abspath(path));
-    _split(abspath, '/', path_list);
-}
-
-std::vector<std::string> _make_path_list(const std::string& path)
-{
-    std::vector<std::string> path_list;
-    _make_path_list(path, path_list);
-    return path_list;
 }
 
 std::string ftxpath::commonprefix(const std::string &path1,  const std::string &path2)

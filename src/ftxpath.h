@@ -35,6 +35,9 @@ namespace ftx {
 		static std::string normpath(const std::string&);
 		static std::string abspath(const std::string&);
 		static std::string relpath(const std::string&, const std::string& start = std::string());
+
+		static std::string commonprefix(const std::string&, const std::string&);
+		static std::string commonprefix(const std::vector<std::string>&);
 	};
 }
 
