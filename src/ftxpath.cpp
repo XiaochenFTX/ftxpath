@@ -278,18 +278,14 @@ void _join_two_win32(std::string &result_drive, std::string &result_path, const 
 	std::string pdrive;
 	std::string ppath;
 	std::tie(pdrive, ppath) = _splitdrive_win32(rpath);
-	if (!ppath.empty())
+	if (!ppath.empty() && (ppath[0] == sep || ppath[0] == altsep))
 	{
-		auto c = ppath[0];
-		if (c == sep || c == altsep)
+		if (!pdrive.empty() && result_drive.empty())
 		{
-			if (!pdrive.empty() && result_drive.empty())
-			{
-				result_drive = pdrive;
-			}
-			result_path = ppath;
-			return;
+			result_drive = pdrive;
 		}
+		result_path = ppath;
+		return;
 	}
 	else if (!pdrive.empty() && pdrive != result_drive)
 	{
@@ -1093,6 +1089,35 @@ bool path::exists(const std::string &path)
 int path::cd(const std::string &path)
 {
 	return chdir(path.c_str());
+}
+
+void path::makedirs(const std::string &path)
+{
+	std::string npath = normpath(abspath(path));
+	
+	std::string temp_path;
+#ifdef WIN32
+	std::tie(temp_path, npath) = splitdrive(npath);
+	if (temp_path.empty())
+	{
+		return;
+	}	
+#endif
+	temp_path += + sep;
+	
+	auto node_list = _split(npath, sep);
+	for (auto node : node_list)
+	{
+		temp_path = join(temp_path, node);
+		if (!isdir(temp_path))
+		{
+#ifdef WIN32
+			mkdir(temp_path.c_str());
+#else
+			mkdir(temp_path.c_str(), ACCESSPERMS);
+#endif
+		}
+	}
 }
 
 // =============================================================

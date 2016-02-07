@@ -46,6 +46,8 @@ namespace ftx {
 
 		// chdir
 		static int cd(const std::string&);
+
+		static void makedirs(const std::string&);
 	};
 }
 
