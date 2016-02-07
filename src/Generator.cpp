@@ -11,6 +11,8 @@
 #include "ftxpath.h"
 
 
+using namespace ftx;
+
 PathGenerator::PathIterator::PathIterator(PathGenerator* generator)
 : _generator(generator)
 , _current()
@@ -42,10 +44,10 @@ const PathGenerator::PathTuple& PathGenerator::PathIterator::next()
     std::vector<std::string> folder_list;
     std::vector<std::string> file_list;
     
-    for (auto name : ftxpath::listdir(root))
+    for (auto name : path::listdir(root))
     {
-        std::string full_name = ftxpath::join(root, name);
-        if (ftxpath::isdir(full_name))
+		std::string full_name = path::join(root, name);
+		if (path::isdir(full_name))
         {
             folder_list.push_back(name);
             _generator->pushFolder(full_name);
@@ -62,7 +64,7 @@ const PathGenerator::PathTuple& PathGenerator::PathIterator::next()
 }
 
 PathGenerator::PathGenerator(const std::string& path)
-: _roots({ftxpath::normpath(ftxpath::abspath(path))})
+: _roots({ path::normpath(path::abspath(path)) })
 , _current(this)
 {
 }
@@ -79,7 +81,7 @@ const PathGenerator::PathIterator& PathGenerator::end()
 
 void PathGenerator::pushFolder(const std::string& folder)
 {
-    _roots.push_back(ftxpath::normpath(folder));
+	_roots.push_back(path::normpath(folder));
 }
 
 void PathGenerator::popRoot()
@@ -100,7 +102,7 @@ std::string PathGenerator::nextRoot()
     }
     
     std::string root = _roots.back();
-    if (!ftxpath::isdir(root))
+	if (!path::isdir(root))
     {
         return std::string();
     }

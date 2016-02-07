@@ -11,7 +11,7 @@ bool test_walk_ghost()
 {
     std::string path = "asdfgh";
 
-    for (auto p : ftxpath::walk(path))
+    for (auto p : ftx::path::walk(path))
     {
         if (!std::get<0>(p).empty())
         {
@@ -40,7 +40,7 @@ bool test_walk_check()
 {
     std::string path = "../test/testlistdir";
 
-    for (auto p : ftxpath::walk(ftxpath::abspath(path)))
+	for (auto p : ftx::path::walk(ftx::path::abspath(path)))
     {
         std::string root = std::get<0>(p);
         if (root.empty())
@@ -48,7 +48,7 @@ bool test_walk_check()
             std::cout<< "walk check root empty" <<std::endl;
             return false;
         }
-        if (!ftxpath::isdir(root))
+		if (!ftx::path::isdir(root))
         {
             std::cout<< "walk check root not dir" <<std::endl;
             return false;
@@ -62,7 +62,7 @@ bool test_walk_check()
         }
         for (auto dir : std::get<1>(p))
         {
-            if (!ftxpath::isdir(ftxpath::join(root, dir)))
+			if (!ftx::path::isdir(ftx::path::join(root, dir)))
             {
                 std::cout<< "walk check dir but not dir" <<std::endl;
                 return false;
@@ -77,7 +77,7 @@ bool test_walk_check()
         }
         for (auto file : std::get<2>(p))
         {
-            if (!ftxpath::isfile(ftxpath::join(root, file)))
+			if (!ftx::path::isfile(ftx::path::join(root, file)))
             {
                 std::cout<< "walk check file but not file" <<std::endl;
                 return false;
