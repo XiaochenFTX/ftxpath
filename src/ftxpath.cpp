@@ -33,6 +33,7 @@ const char sep = '\\';
 const char altsep = '/';
 #else
 const char sep = '/';
+const char altsep = 0;
 #endif
 
 
@@ -213,29 +214,31 @@ std::tuple<std::string, std::string> _split_win32(const std::string &path)
 #else
 std::tuple<std::string, std::string> _split_posix(const std::string &path)
 {
-	auto pos = path.find_last_of(sep);
+	auto pos = path.rfind('/');
 
 	if (pos == std::string::npos)
 	{
-		return std::tuple<std::string, std::string>("", path);
+		return std::tuple<std::string, std::string>(std::string(), path);
 	}
 
-	std::string head = path.substr(0, pos);
-	std::string tail = path.substr(pos);
+	std::string head = path.substr(0, pos + 1);
+	std::string tail = path.substr(pos + 1);
 
 	for (auto c : head)
 	{
-		if (c != sep)
+		if (c != '/')
 		{
-			if (*(head.rbegin()) == sep)
+			while (*(head.rbegin()) == '/')
 			{
 				head = head.substr(0, head.size() - 1);
+				continue;
 			}
-			return std::make_tuple(head, tail);
+
+			break;
 		}
 	}
 
-	return std::tuple<std::string, std::string>(path, "");
+	return std::make_tuple(head, tail);
 }
 #endif
 
@@ -356,7 +359,7 @@ std::string _join_win32(const std::string &lpath, const std::vector<std::string>
 	return result_drive + result_path;
 }
 #else
-void _join_two_posix(const std::string &lpath, const std::string &rpath)
+void _join_two_posix(std::string &lpath, const std::string &rpath)
 {
 	if (_isabs_posix(rpath))
 	{
@@ -807,7 +810,7 @@ std::string _relpath_posix(const std::string &path, const std::string &start)
 	std::string rel_path;
 	for (auto node : rel_list)
 	{
-		_join(rel_path, node);
+		_join_two_posix(rel_path, node);
 	}
 
 	return rel_path;
@@ -901,6 +904,10 @@ std::string path::commonprefix(const std::string &path1, const std::string &path
 
 	return common_path;
 }
+
+#ifndef MAXUINT32
+#define MAXUINT32 (-1)
+#endif
 
 std::string path::commonprefix(const std::vector<std::string> &path_list)
 {

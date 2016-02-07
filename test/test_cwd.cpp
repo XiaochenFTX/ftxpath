@@ -8,7 +8,6 @@
 #include "tester.h"
 
 #include <sys/stat.h>
-#include <direct.h>
 
 std::string mycwd()
 {
