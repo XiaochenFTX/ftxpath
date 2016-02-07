@@ -38,6 +38,8 @@ namespace ftx {
 
 		static std::string commonprefix(const std::string&, const std::string&);
 		static std::string commonprefix(const std::vector<std::string>&);
+
+		static std::vector<std::string> listdir(const std::string&);
 	};
 }
 
