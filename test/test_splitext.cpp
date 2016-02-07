@@ -13,7 +13,7 @@ bool test_splitext_normal()
     std::string root = "/a/b/c/a";
     std::string ext = ".txt";
 
-    auto tuple = ftxpath::splitext(path);
+	auto tuple = ftx::path::splitext(path);
 
     return root == std::get<0>(tuple) && ext == std::get<1>(tuple);
 }
@@ -22,7 +22,7 @@ bool test_splitext_noext()
 {
     std::string path = "a/s/d/f/";
 
-    auto tuple = ftxpath::splitext(path);
+	auto tuple = ftx::path::splitext(path);
 
     return path == std::get<0>(tuple) && std::get<1>(tuple).empty();
 }
@@ -33,7 +33,7 @@ bool test_splitext_onefile()
     std::string root = "a.a";
     std::string ext = ".a";
 
-    auto tuple = ftxpath::splitext(path);
+	auto tuple = ftx::path::splitext(path);
 
     return root == std::get<0>(tuple) && ext == std::get<1>(tuple);
 }
@@ -42,7 +42,7 @@ bool test_splitext_hidefile()
 {
     std::string path = "a/b/.ext";
 
-    auto tuple = ftxpath::splitext(path);
+	auto tuple = ftx::path::splitext(path);
 
     return path == std::get<0>(tuple) && std::get<1>(tuple).empty();
 }
@@ -53,7 +53,7 @@ bool test_splitext_multidot()
     std::string root = "a.a/b.b.b/c.c.c/../a.b.b";
     std::string ext = ".b";
 
-    auto tuple = ftxpath::splitext(path);
+	auto tuple = ftx::path::splitext(path);
 
     return root == std::get<0>(tuple) && ext == std::get<1>(tuple);
 }

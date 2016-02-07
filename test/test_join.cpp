@@ -9,8 +9,12 @@
 
 bool join_string()
 {
-    std::string result = ftxpath::join("dir1", "dir2");
+    std::string result = ftx::path::join("dir1", "dir2");
     std::string right_res = "dir1/dir2";
+
+#ifdef WIN32
+	right_res = "dir1\\dir2";
+#endif
 
     std::cout<< "join str & str result: " << result <<std::endl;
 
@@ -19,8 +23,12 @@ bool join_string()
 
 bool join_vec()
 {
-    std::string result = ftxpath::join("dir", {"a", "b", "c", "d"});
+	std::string result = ftx::path::join("dir", { "a", "b", "c", "d" });
     std::string right_res = "dir/a/b/c/d";
+
+#ifdef WIN32
+	right_res = "dir\\a\\b\\c\\d";
+#endif
 
     std::cout<< "join str & vector result: " << result <<std::endl;
 
@@ -29,8 +37,12 @@ bool join_vec()
 
 bool join_path_str()
 {
-    std::string result = ftxpath::join("dir1/dir2/dir3", "a/b/c/d");
+	std::string result = ftx::path::join("dir1/dir2/dir3", "a/b/c/d");
     std::string right_res = "dir1/dir2/dir3/a/b/c/d";
+
+#ifdef WIN32
+	right_res = "dir1/dir2/dir3\\a/b/c/d";
+#endif
 
     std::cout<< "join path & str result: " << result <<std::endl;
 
@@ -39,8 +51,12 @@ bool join_path_str()
 
 bool join_path_vec()
 {
-    std::string result = ftxpath::join("dir1/dir2/dir3", {"ab", "aa/bb", "abc", "c", "a/b/c"});
+	std::string result = ftx::path::join("dir1/dir2/dir3", { "ab", "aa/bb", "abc", "c", "a/b/c" });
     std::string right_res = "dir1/dir2/dir3/ab/aa/bb/abc/c/a/b/c";
+
+#ifdef WIN32
+	right_res = "dir1/dir2/dir3\\ab\\aa/bb\\abc\\c\\a/b/c";
+#endif
 
     std::cout<< "join path & path vector result: " << result <<std::endl;
 

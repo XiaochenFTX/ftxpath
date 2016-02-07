@@ -11,9 +11,15 @@
 
 std::string mycwd()
 {
-    char* buff = getcwd(nullptr, 0);
-    std::string path(buff);
-    free(buff);
+	char* buff = nullptr;
+	buff = getcwd(nullptr, 0);
+
+	std::string path(buff);
+	
+	if (buff != nullptr)
+	{
+		free(buff);
+	}
 
     return path;
 }
@@ -25,7 +31,7 @@ bool test_cwd_isdir(std::string path)
 }
 
 bool test_cwd() {
-    std::string str_cwd = ftxpath::cwd();
+	std::string str_cwd = ftx::path::cwd();
 
     LOG_TEST_STRING(str_cwd);
 

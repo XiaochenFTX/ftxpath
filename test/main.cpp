@@ -20,6 +20,7 @@
 #include "test_exists.h"
 #include "test_commonprefix.h"
 #include "test_splitext.h"
+#include "test_splitdrive.h"
 #include "test_chdir.h"
 #include "test_makedirs.h"
 #include "test_rmtree.h"
@@ -37,17 +38,18 @@ int main(int argc, char* argv[])
     CASE_ONE_TEST_BY_ARGV1("join", test_join());
     CASE_ONE_TEST_BY_ARGV1("basename", test_basename());
     CASE_ONE_TEST_BY_ARGV1("dirname", test_dirname());
+	CASE_ONE_TEST_BY_ARGV1("splitext", test_splitext());
+	CASE_ONE_TEST_BY_ARGV1("splitdrive", test_splitdrive());
     CASE_ONE_TEST_BY_ARGV1("split", test_split());
     CASE_ONE_TEST_BY_ARGV1("normpath", test_normpath());
     CASE_ONE_TEST_BY_ARGV1("abspath", test_abspath());
     CASE_ONE_TEST_BY_ARGV1("relpath", test_relpath());
     CASE_ONE_TEST_BY_ARGV1("listdir", test_listdir());
-    CASE_ONE_TEST_BY_ARGV1("isdir", test_isabs());
+    CASE_ONE_TEST_BY_ARGV1("isdir", test_isdir());
     CASE_ONE_TEST_BY_ARGV1("isfile", test_isfile());
     CASE_ONE_TEST_BY_ARGV1("walk", test_walk());
     CASE_ONE_TEST_BY_ARGV1("exists", test_exists());
     CASE_ONE_TEST_BY_ARGV1("commonprefix", test_commonprefix());
-    CASE_ONE_TEST_BY_ARGV1("splitext", test_splitext());
     CASE_ONE_TEST_BY_ARGV1("chdir", test_chdir());
     CASE_ONE_TEST_BY_ARGV1("makedirs", test_makedirs());
     CASE_ONE_TEST_BY_ARGV1("rmtree", test_rmtree());

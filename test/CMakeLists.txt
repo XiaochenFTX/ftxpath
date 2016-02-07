@@ -34,6 +34,8 @@ set(SOURCE_FILES
         test_commonprefix.h
         test_splitext.cpp
         test_splitext.h
+		test_splitdrive.cpp
+        test_splitdrive.h
         test_chdir.cpp
         test_chdir.h
         test_makedirs.cpp
@@ -66,6 +68,7 @@ add_test(test_walk ftxpathtest walk)
 add_test(test_exists ftxpathtest exists)
 add_test(test_commonprefix ftxpathtest commonprefix)
 add_test(test_splitext ftxpathtest splitext)
+add_test(test_splitdrive ftxpathtest splitdrive)
 add_test(test_chdir ftxpathtest chdir)
 add_test(test_makedirs ftxpathtest makedirs)
 add_test(test_rmtree ftxpathtest rmtree)

@@ -14,7 +14,7 @@ bool test_listdir_check()
     std::string dirpath = "../test/testlistdir";
 
     std::set<std::string> right_set = {"dir1", "dir2", "file1", "file2"};
-    std::vector<std::string> path_list = ftxpath::listdir(dirpath);
+    std::vector<std::string> path_list = ftx::path::listdir(dirpath);
 
     for (auto node : path_list)
     {

@@ -15,42 +15,46 @@
 #include <vector>
 #include <deque>
 
-
-class PathGenerator
+namespace ftx
 {
-public:
-    typedef std::tuple<std::string, std::vector<std::string>, std::vector<std::string>> PathTuple;
 
-    class PathIterator
-    {
-    public:
-        PathIterator(PathGenerator* generator);
-    
-        PathIterator& operator++();
-        bool operator!=(const PathIterator& it);
-        const PathTuple& operator*();
-        
-    private:
-        const PathTuple& next();
-        
-    private:
-        PathTuple _current;
-        PathGenerator* _generator;
-    };
-    
-    PathGenerator(const std::string& path);
-    const PathIterator& begin();
-    const PathIterator& end();
-    
-private:
-    void pushFolder(const std::string& folder);
-    void popRoot();
-    std::string nextRoot();
-    bool empty();
+	class PathGenerator
+	{
+	public:
+		typedef std::tuple<std::string, std::vector<std::string>, std::vector<std::string>> PathTuple;
 
-private:
-    std::deque<std::string> _roots;
-    PathIterator _current;
-};
+		class PathIterator
+		{
+		public:
+			PathIterator(PathGenerator* generator);
+
+			PathIterator& operator++();
+			bool operator!=(const PathIterator& it);
+			const PathTuple& operator*();
+
+		private:
+			const PathTuple& next();
+
+		private:
+			PathTuple _current;
+			PathGenerator* _generator;
+		};
+
+		PathGenerator(const std::string& path);
+		const PathIterator& begin();
+		const PathIterator& end();
+
+	private:
+		void pushFolder(const std::string& folder);
+		void popRoot();
+		std::string nextRoot();
+		bool empty();
+
+	private:
+		std::deque<std::string> _roots;
+		PathIterator _current;
+	};
+
+}
 
 #endif /* defined(__libpath__Generator__) */

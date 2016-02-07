@@ -10,13 +10,16 @@
 bool test_isabs_check_abspath()
 {
     std::string abspath = "/a/b/c";
-    return ftxpath::isabs(abspath);
+#ifdef WIN32
+	abspath = "c:\\a\\b\\c";
+#endif
+	return ftx::path::isabs(abspath);
 }
 
 bool test_isabs_check_relpath()
 {
     std::string relpath = "../a/b/c";
-    return !ftxpath::isabs(relpath);
+	return !ftx::path::isabs(relpath);
 }
 
 bool test_isabs() {

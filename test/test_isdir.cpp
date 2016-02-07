@@ -10,19 +10,19 @@
 bool test_isdir_dir()
 {
     std::string path = "../test/testlistdir";
-    return ftxpath::isdir(path);
+    return ftx::path::isdir(path);
 }
 
 bool test_isdir_file()
 {
     std::string path = "../test/testlistdir/file1";
-    return !ftxpath::isdir(path);
+    return !ftx::path::isdir(path);
 }
 
 bool test_isdir_ghost()
 {
     std::string path = "asdfgh";
-    return !ftxpath::isdir(path);
+    return !ftx::path::isdir(path);
 }
 
 bool test_isdir() {

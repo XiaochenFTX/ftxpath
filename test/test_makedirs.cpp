@@ -10,9 +10,9 @@
 bool test_makedirs_one()
 {
     std::string path = "../test/testmakedirs";
-    ftxpath::makedirs(path);
+    ftx::path::makedirs(path);
 
-    bool result = ftxpath::isdir(path);
+	bool result = ftx::path::isdir(path);
 
     rmdir(path.c_str());
 
@@ -26,11 +26,11 @@ bool test_makedirs_multi()
     std::string dir2 = "../test/testmakedirs/dir1";
     std::string dir3 = "../test/testmakedirs/dir1/dir2";
 
-    ftxpath::makedirs(path);
+	ftx::path::makedirs(path);
 
-    bool res1 = ftxpath::isdir(dir1);
-    bool res2 = ftxpath::isdir(dir2);
-    bool res3 = ftxpath::isdir(dir3);
+	bool res1 = ftx::path::isdir(dir1);
+	bool res2 = ftx::path::isdir(dir2);
+	bool res3 = ftx::path::isdir(dir3);
 
     if (res3)
     {

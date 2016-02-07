@@ -29,6 +29,20 @@
 
 .idea/
 
+# Visual Studio 
+*.vcxproj
+*.vcxproj.filters
+*.opensdf
+*.sdf
+*.sln
+*.suo
+*.pdb
+ipch/
+Debug/
+Release/
+Win32/Debug/
+Win32/Release/
+
 CMake*
 Makefile
 Testing/

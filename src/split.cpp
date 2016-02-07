@@ -12,7 +12,7 @@
 
 
 
-std::vector<std::string> &_split(const std::string &s, char delim, std::vector<std::string> &elems) {
+std::vector<std::string> &ftx::_split(const std::string &s, char delim, std::vector<std::string> &elems) {
     std::stringstream ss(s);
     std::string item;
     while (std::getline(ss, item, delim)) {
@@ -22,7 +22,7 @@ std::vector<std::string> &_split(const std::string &s, char delim, std::vector<s
 }
 
 
-std::vector<std::string> _split(const std::string &s, char delim) {
+std::vector<std::string> ftx::_split(const std::string &s, char delim) {
     std::vector<std::string> elems;
     _split(s, delim, elems);
     return elems;

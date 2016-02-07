@@ -26,8 +26,12 @@ Python (os.path) like, c++ path library
 ### build for android: ###
     $ cmake . -DCMAKE_TOOLCHAIN_FILE=toolchain/android.toolchain.cmake  \
     		  -DANDROID_NDK=<your ndk path>								\
-    		  -DANDROID_ABI=<armeabi or armeabi-v7a ... >				
+    		  -DANDROID_ABI=<armeabi or armeabi-v7a ... >			
+
 example:<br>
 ```
 $ cmake . -DCMAKE_TOOLCHAIN_FILE=toolchain/android.toolchain.cmake -DANDROID_NDK=/Users/xiaochen/Develop/crystax-ndk-10.2.1 -DANDROID_TOOLCHAIN_NAME=arm-linux-androideabi-4.9 -DANDROID_NATIVE_API_LEVEL=8 -DANDROID_ABI=armeabi
 ```
+### build for windows: ###
+	$ cmake .
+	and use Visual Studio open the "ftxpath.sln"
