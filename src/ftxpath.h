@@ -48,6 +48,7 @@ namespace ftx {
 		static int cd(const std::string&);
 
 		static void makedirs(const std::string&);
+		static void rmtree(const std::string&);
 	};
 }
 

@@ -19,44 +19,44 @@ void make_test_tree()
     std::string tree_file5 = "dir1/dir2/dir3/file5";
     std::string tree_file6 = "file6";
 
-    ftxpath::makedirs(ftxpath::join(path, tree_folder1));
-    ftxpath::makedirs(ftxpath::join(path, tree_folder2));
+	ftx::path::makedirs(ftx::path::join(path, tree_folder1));
+	ftx::path::makedirs(ftx::path::join(path, tree_folder2));
 
-    FILE* fp = fopen(ftxpath::join(path, tree_file1).c_str(), "w");
+	FILE* fp = fopen(ftx::path::join(path, tree_file1).c_str(), "w");
     fclose(fp);
-    fp = fopen(ftxpath::join(path, tree_file2).c_str(), "w");
+	fp = fopen(ftx::path::join(path, tree_file2).c_str(), "w");
     fclose(fp);
-    fp = fopen(ftxpath::join(path, tree_file3).c_str(), "w");
+	fp = fopen(ftx::path::join(path, tree_file3).c_str(), "w");
     fclose(fp);
-    fp = fopen(ftxpath::join(path, tree_file4).c_str(), "w");
+	fp = fopen(ftx::path::join(path, tree_file4).c_str(), "w");
     fclose(fp);
-    fp = fopen(ftxpath::join(path, tree_file5).c_str(), "w");
+	fp = fopen(ftx::path::join(path, tree_file5).c_str(), "w");
     fclose(fp);
-    fp = fopen(ftxpath::join(path, tree_file6).c_str(), "w");
+	fp = fopen(ftx::path::join(path, tree_file6).c_str(), "w");
     fclose(fp);
 }
 
 bool test_rmtree_check_make_tree()
 {
     std::string path = "../test/testrmtree";
-    return ftxpath::isdir(path);
+	return ftx::path::isdir(path);
 }
 
 bool test_rmtree_one_file()
 {
     std::string path = "../test/testrmtree/file6";
-    ftxpath::rmtree(path);
+	ftx::path::rmtree(path);
 
-    return !ftxpath::exists(path);
+	return !ftx::path::exists(path);
 }
 
 bool test_rmtree_normal()
 {
     std::string path = "../test/testrmtree";
 
-    ftxpath::rmtree(path);
-
-    return !ftxpath::exists(path);
+	ftx::path::rmtree(path);
+	
+	return !ftx::path::exists(path);
 }
 
 bool test_rmtree() {

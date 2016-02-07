@@ -1120,6 +1120,60 @@ void path::makedirs(const std::string &path)
 	}
 }
 
+void path::rmtree(const std::string &path)
+{
+	if (!isdir(path))
+	{
+		remove(path.c_str());
+	}
+	
+	std::string temp_path = relpath(path);
+	auto nodes = listdir(temp_path);
+	while (nodes.size() != 0)
+	{
+		std::string node_path = join(temp_path, nodes[0]);
+
+		if (isdir(node_path))
+		{
+			auto temp_nodes = listdir(node_path);
+			if (temp_nodes.size() == 0)
+			{
+				rmdir(node_path.c_str());
+			}
+			else
+			{
+				temp_path = node_path;
+			}
+		}
+		else
+		{
+			remove(node_path.c_str());
+		}
+
+		nodes = listdir(temp_path);
+		
+		while (nodes.size() == 0)
+		{
+			std::string root;
+			std::string node;
+			std::tie(root, node) = split(relpath(temp_path, path));
+
+			if (node.empty() || node == curdir || root.find(pardir) != std::string::npos)
+			{
+				break;
+			}
+
+			rmdir(temp_path.c_str());
+
+			temp_path = join(path, root);
+			nodes = listdir(temp_path);
+		}
+	}
+	
+	rmdir(path.c_str());
+}
+
+
 // =============================================================
 std::string ftxpath::cwd()
 {
