@@ -1090,6 +1090,11 @@ bool path::exists(const std::string &path)
 	return stat(path.c_str(), &buf) == 0;
 }
 
+int path::cd(const std::string &path)
+{
+	return chdir(path.c_str());
+}
+
 // =============================================================
 std::string ftxpath::cwd()
 {

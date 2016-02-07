@@ -43,6 +43,9 @@ namespace ftx {
 		static bool isdir(const std::string&);
 		static bool isfile(const std::string&);
 		static bool exists(const std::string&);
+
+		// chdir
+		static int cd(const std::string&);
 	};
 }
 

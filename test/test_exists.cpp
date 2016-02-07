@@ -10,13 +10,13 @@
 bool test_exists_check()
 {
     std::string path = "../test/testlistdir";
-    return ftxpath::exists(path);
+    return ftx::path::exists(path);
 }
 
 bool test_exists_check_not()
 {
     std::string path = "asdffds";
-    return !ftxpath::exists(path);
+    return !ftx::path::exists(path);
 }
 
 bool test_exists() {
