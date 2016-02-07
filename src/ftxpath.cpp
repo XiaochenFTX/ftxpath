@@ -1067,6 +1067,23 @@ std::vector<std::string> path::listdir(const std::string &path)
 #endif
 }
 
+#ifdef WIN32
+#define S_ISDIR(st_mode) (_S_IFDIR & st_mode)
+#define S_ISREG(st_mode) (_S_IFREG & st_mode)
+#endif
+
+bool path::isdir(const std::string &path)
+{
+	struct stat buf;
+	return stat(path.c_str(), &buf) == 0 && S_ISDIR(buf.st_mode);
+}
+
+bool path::isfile(const std::string &path)
+{
+	struct stat buf;
+	return stat(path.c_str(), &buf) == 0 && S_ISREG(buf.st_mode);
+}
+
 // =============================================================
 std::string ftxpath::cwd()
 {
@@ -1380,11 +1397,6 @@ std::vector<std::string> ftxpath::listdir(const std::string &path)
 	return _listdir_posix(path);
 #endif
 }
-
-#ifdef WIN32
-#define S_ISDIR(st_mode) (_S_IFDIR & st_mode)
-#define S_ISREG(st_mode) (_S_IFREG & st_mode)
-#endif
 
 bool ftxpath::isdir(const std::string &path)
 {
