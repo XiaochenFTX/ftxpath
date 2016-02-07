@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
     CASE_ONE_TEST_BY_ARGV1("isdir", test_isdir());
     CASE_ONE_TEST_BY_ARGV1("isfile", test_isfile());
     //CASE_ONE_TEST_BY_ARGV1("walk", test_walk());
-    //CASE_ONE_TEST_BY_ARGV1("exists", test_exists());
+    CASE_ONE_TEST_BY_ARGV1("exists", test_exists());
     CASE_ONE_TEST_BY_ARGV1("commonprefix", test_commonprefix());
     //CASE_ONE_TEST_BY_ARGV1("chdir", test_chdir());
     //CASE_ONE_TEST_BY_ARGV1("makedirs", test_makedirs());

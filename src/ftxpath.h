@@ -42,6 +42,7 @@ namespace ftx {
 		static std::vector<std::string> listdir(const std::string&);
 		static bool isdir(const std::string&);
 		static bool isfile(const std::string&);
+		static bool exists(const std::string&);
 	};
 }
 

@@ -1084,6 +1084,12 @@ bool path::isfile(const std::string &path)
 	return stat(path.c_str(), &buf) == 0 && S_ISREG(buf.st_mode);
 }
 
+bool path::exists(const std::string &path)
+{
+	struct stat buf;
+	return stat(path.c_str(), &buf) == 0;
+}
+
 // =============================================================
 std::string ftxpath::cwd()
 {
